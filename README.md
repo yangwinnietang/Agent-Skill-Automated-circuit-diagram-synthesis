@@ -1,6 +1,6 @@
 # Circuit Diagram Generator
 
-![Circuit Diagram Example](photo.png)
+![Circuit Diagram Example](https://raw.githubusercontent.com/yangwinnietang/Agent-Skill-Automated-circuit-diagram-synthesis/main/photo.png)
 
 ## Overview
 
