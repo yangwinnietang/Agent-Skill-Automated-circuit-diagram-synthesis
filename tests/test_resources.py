@@ -41,7 +41,7 @@ class ResourceTests(unittest.TestCase):
 
     def test_skill_local_links_resolve(self):
         for file in [ROOT / 'SKILL.md', *(ROOT / 'references').glob('*.md')]:
-            for link in re.findall(r'\]\(([^)]+)\)', file.read_text()):
+            for link in re.findall(r'\]\(([^)]+)\)', file.read_text(encoding="utf-8")):
                 if not link.startswith(('https://', 'http://', '#')):
                     self.assertTrue((file.parent / link).is_file(), f'{file.name}: {link}')
 

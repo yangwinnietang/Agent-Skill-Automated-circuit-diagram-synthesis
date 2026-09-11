@@ -142,7 +142,7 @@ def build(tex_file, *, output_dir=None, engine="pdflatex", formats=("pdf",),
                     pdf = work / "circuit.pdf"
                     _validate_artifact(pdf, "pdf")
                     log.flush()
-                    log_text = raw_log.read_text(errors="replace")
+                    log_text = raw_log.read_text(encoding="utf-8", errors="replace")
                     warnings = [line.strip() for line in log_text.splitlines()
                                 if "Warning:" in line or "Overfull" in line or "Underfull" in line]
                     if "Missing character:" in log_text:
@@ -157,7 +157,7 @@ def build(tex_file, *, output_dir=None, engine="pdflatex", formats=("pdf",),
                             if info_path.exists():
                                 log.write(info_path.read_bytes())
                                 log.flush()
-                        pages = re.findall(r"^Pages:\s+(\d+)\s*$", info_path.read_text(errors="replace"), re.M)
+                        pages = re.findall(r"^Pages:\s+(\d+)\s*$", info_path.read_text(encoding="utf-8", errors="replace"), re.M)
                         if len(pages) != 1:
                             raise BuildError("Could not determine PDF page count from pdfinfo output.")
                         if int(pages[0]) != 1:
@@ -228,7 +228,7 @@ def main(argv=None):
             except BuildError as exc:
                 print(f"Toolchain check failed: {exc}", file=sys.stderr)
                 for log in Path(temp).glob("*.compile.log"):
-                    print(log.read_text(errors="replace")[-6000:], file=sys.stderr)
+                    print(log.read_text(encoding="utf-8", errors="replace")[-6000:], file=sys.stderr)
                 return 1
             print(f"Toolchain check passed: {args.engine}; {', '.join(result.artifacts)}.")
             for warning in result.warnings:

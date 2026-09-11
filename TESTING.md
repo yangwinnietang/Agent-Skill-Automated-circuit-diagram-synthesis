@@ -71,6 +71,8 @@ Normal installations should use their distribution package manager, not mix
 current CTAN language packages into an older LaTeX kernel.
 
 - Fast checks: 43 methods passed.
+- Revised full local suite with XeLaTeX selected: **56 tests passed, no skips**,
+  including all 17 documents, Chinese, missing glyphs, polarity and CLI checks.
 - Initial corrected real suite: pdfLaTeX and XeLaTeX, all 12 examples plus template
   passed; the 49-method suite at that point passed with its optional Chinese test
   disabled. The expanded corpus and additional regressions are included in CI.
@@ -82,7 +84,9 @@ current CTAN language packages into an older LaTeX kernel.
 
 The initial CI run found a Windows-only test assertion issue: a temporary path in
 8.3 short-name form was compared with its resolved long form. The assertion now
-compares resolved paths. Local extended runs also exposed an undetermined page
+compares resolved paths. The next Windows run exposed locale-dependent decoding
+of UTF-8 Markdown in the resource test; resource/log reads now select UTF-8
+explicitly. Local extended runs also exposed an undetermined page
 count being reported as a multi-page document; pdfinfo output is now parsed
 separately and reports the exact failure category.
 

@@ -36,8 +36,8 @@ class IntegrationTests(unittest.TestCase):
         width, height = struct.unpack('>II', png[16:24])
         self.assertGreater(width, 100)
         self.assertGreater(height, 50)
-        self.assertNotIn('Missing character:', result.log.read_text(errors='replace'))
-        self.assertNotIn('cannot open font map', result.log.read_text(errors='replace'))
+        self.assertNotIn('Missing character:', result.log.read_text(encoding="utf-8", errors='replace'))
+        self.assertNotIn('cannot open font map', result.log.read_text(encoding="utf-8", errors='replace'))
         self.assertFalse(any('Overfull' in w for w in result.warnings), result.warnings)
 
     def test_all_examples_all_requested_engines(self):
@@ -56,7 +56,7 @@ class IntegrationTests(unittest.TestCase):
         source_dir = self.root / 'folder with spaces 电路'
         source_dir.mkdir()
         source = source_dir / '电路 name $ [1].tex'
-        source.write_text((ROOT / 'assets/template.tex').read_text().replace('\\begin{circuitikz}', '\\begin{circuitikz}\n\\input{label.tex}'))
+        source.write_text((ROOT / 'assets/template.tex').read_text(encoding="utf-8").replace('\\begin{circuitikz}', '\\begin{circuitikz}\n\\input{label.tex}'))
         (source_dir / 'label.tex').write_text('\\node at (2,4) {Included};')
         result = build(source, output_dir=self.root / 'new nested' / '输出', formats=('svg', 'png'))
         self.verify_outputs(result)
@@ -76,8 +76,8 @@ class IntegrationTests(unittest.TestCase):
         source.with_suffix('.pdf').write_text('previous user PDF')
         result = subprocess.run([sys.executable, str(ROOT / 'scripts/compile_circuit.py'), str(source)], capture_output=True, timeout=120)
         self.assertEqual(result.returncode, 1)
-        self.assertEqual(source.with_suffix('.pdf').read_text(), 'previous user PDF')
-        self.assertIn('Undefined control sequence', (self.root / 'bad.compile.log').read_text())
+        self.assertEqual(source.with_suffix('.pdf').read_text(encoding="utf-8"), 'previous user PDF')
+        self.assertIn('Undefined control sequence', (self.root / 'bad.compile.log').read_text(encoding="utf-8"))
 
     def test_real_tex_timeout(self):
         source = self.root / 'loop.tex'
@@ -106,7 +106,7 @@ class IntegrationTests(unittest.TestCase):
 
     def test_american_resistor_variant(self):
         source = self.root / 'american.tex'
-        source.write_text((ROOT / 'assets/examples/divider.tex').read_text().replace('european resistors', 'american resistors'))
+        source.write_text((ROOT / 'assets/examples/divider.tex').read_text(encoding="utf-8").replace('european resistors', 'american resistors'))
         self.verify_outputs(build(source, formats=('svg', 'png')))
 
     def test_source_polarity_in_rendered_pdf(self):

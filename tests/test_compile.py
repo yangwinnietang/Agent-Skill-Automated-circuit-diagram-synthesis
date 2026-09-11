@@ -71,7 +71,7 @@ class BuildTests(unittest.TestCase):
         result = self.build()
         self.assertEqual(set(result.artifacts), {'pdf'})
         self.assertEqual(result.artifacts['pdf'].read_bytes(), b'%PDF-1.5\ncontent')
-        self.assertEqual(self.source.read_text(), 'source remains editable')
+        self.assertEqual(self.source.read_text(encoding="utf-8"), 'source remains editable')
         self.assertEqual(len(self.calls), 2)
         self.assertTrue(result.log.exists())
 
@@ -146,7 +146,7 @@ class BuildTests(unittest.TestCase):
         with self.assertRaisesRegex(cc.BuildError, 'Build log'):
             self.build()
         self.assertEqual(old.read_bytes(), b'old PDF')
-        self.assertIn('line 8', (self.output / 'diagram.compile.log').read_text())
+        self.assertIn('line 8', (self.output / 'diagram.compile.log').read_text(encoding="utf-8"))
 
     def test_converter_failure_publishes_nothing(self):
         self.output.mkdir()
@@ -156,7 +156,7 @@ class BuildTests(unittest.TestCase):
         with self.assertRaises(cc.BuildError):
             self.build(formats=('svg', 'png'))
         for ext in ['pdf', 'svg', 'png']:
-            self.assertEqual((self.output / ('diagram.' + ext)).read_text(), 'old')
+            self.assertEqual((self.output / ('diagram.' + ext)).read_text(encoding="utf-8"), 'old')
 
     def test_success_without_pdf_rejected(self):
         self.mode = 'no-pdf'
@@ -198,7 +198,7 @@ class BuildTests(unittest.TestCase):
         self.mode = 'no-page-count'
         with self.assertRaisesRegex(cc.BuildError, 'Could not determine PDF page count'):
             self.build(formats=('svg',))
-        self.assertIn('Unexpected tool output', (self.output / 'diagram.compile.log').read_text())
+        self.assertIn('Unexpected tool output', (self.output / 'diagram.compile.log').read_text(encoding="utf-8"))
 
     def test_safe_invocation_and_source_cwd(self):
         self.build(passes=1)
@@ -214,7 +214,7 @@ class BuildTests(unittest.TestCase):
         self.output.write_text('keep me')
         with self.assertRaisesRegex(cc.BuildError, 'File operation failed'):
             self.build()
-        self.assertEqual(self.output.read_text(), 'keep me')
+        self.assertEqual(self.output.read_text(encoding="utf-8"), 'keep me')
 
     def test_boolean_compatibility_helper(self):
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
@@ -248,7 +248,7 @@ class BuildTests(unittest.TestCase):
         with patch.object(cc.os, 'replace', side_effect=OSError('disk error')):
             with self.assertRaises(OSError):
                 cc._publish(self.source, target)
-        self.assertEqual(target.read_text(), 'old')
+        self.assertEqual(target.read_text(encoding="utf-8"), 'old')
         self.assertFalse(list(self.root.glob('.publish-*')))
 
 
@@ -296,10 +296,10 @@ class ExampleTests(unittest.TestCase):
             args = ['--name', 'divider', '--output-dir', temp]
             self.assertEqual(example.main(args), 0)
             target = Path(temp) / 'divider.tex'
-            self.assertIn('\\end{document}', target.read_text())
+            self.assertIn('\\end{document}', target.read_text(encoding="utf-8"))
             target.write_text('user edits')
             self.assertEqual(example.main(args), 1)
-            self.assertEqual(target.read_text(), 'user edits')
+            self.assertEqual(target.read_text(encoding="utf-8"), 'user edits')
 
     def test_copy_from_unrelated_cwd(self):
         with tempfile.TemporaryDirectory() as temp:
