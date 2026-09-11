@@ -1,0 +1,15 @@
+{
+  "description": "Ground truth for the newly authored schematic image; not a reconstruction of the corrupt original.",
+  "nets": ["GND", "VIN", "A", "B"],
+  "components": [
+    {"ref": "V1", "kind": "voltage-source", "value": "12 V", "terminals": {"+": "VIN", "-": "GND"}},
+    {"ref": "R1", "kind": "resistor", "value": "1 kOhm", "terminals": {"1": "VIN", "2": "A"}},
+    {"ref": "R2", "kind": "resistor", "value": "2.2 kOhm", "terminals": {"1": "A", "2": "GND"}},
+    {"ref": "R3", "kind": "resistor", "value": "4.7 kOhm", "terminals": {"1": "VIN", "2": "B"}},
+    {"ref": "R4", "kind": "resistor", "value": "10 kOhm", "terminals": {"1": "B", "2": "GND"}},
+    {"ref": "C1", "kind": "capacitor", "value": "100 nF", "terminals": {"1": "A", "2": "GND"}},
+    {"ref": "D1", "kind": "diode", "value": null, "terminals": {"anode": "A", "cathode": "B"}}
+  ],
+  "ports": {"Vout": "B"},
+  "resistor_style": "rectangular"
+}

@@ -1,0 +1,13 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% Q1: B=RB output, C=RL lower terminal, E=GND.
+% Control input and supply are named ports; no package pin numbers inferred.
+\node[npn] (Q1) at (4,2) {$Q_1$};
+\draw (Q1.B) to[R,l_={$R_B$}] (0,2) node[ocirc,label=left:$V_{ctrl}$] {};
+\draw (Q1.C) to[R,l={$R_L$}] (4,5) node[ocirc,label=above:$V_{CC}$] {};
+\draw (Q1.E) -- (4,0) node[ground] {};
+\end{circuitikz}
+\end{document}

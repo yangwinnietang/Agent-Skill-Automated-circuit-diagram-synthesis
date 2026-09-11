@@ -1,0 +1,14 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% Nets: V1(-)=GND; V1(+)=R1.1=VIN; R1.2=R2.1=VOUT; R2.2=GND.
+\coordinate (vin) at (0,4);
+\coordinate (out) at (4,2);
+\draw (0,0) node[ground] {} to[V,invert,l={$V_1=5\,\mathrm{V}$}] (vin)
+      -- (4,4) to[R,l={$R_1=10\,\mathrm{k}\Omega$}] (out)
+      to[R,l={$R_2=10\,\mathrm{k}\Omega$}] (4,0) -- (0,0);
+\draw (out) node[circ] {} -- (6,2) node[ocirc,label=right:$V_{out}$] {};
+\end{circuitikz}
+\end{document}

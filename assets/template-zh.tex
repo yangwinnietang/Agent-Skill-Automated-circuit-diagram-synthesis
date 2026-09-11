@@ -1,0 +1,11 @@
+% Compile with --engine xelatex. Requires ctex and the Fandol fonts.
+\documentclass[border=10pt]{standalone}
+\usepackage[UTF8,fontset=fandol,scheme=plain]{ctex}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+\draw (0,0) to[V,invert,l=电源] (0,3)
+      to[R,l=负载] (4,3) -- (4,0) -- (0,0);
+\end{circuitikz}
+\end{document}
