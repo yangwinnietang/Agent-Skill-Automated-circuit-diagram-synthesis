@@ -1,0 +1,12 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% I1 arrow GND -> top. R1 and R2 both connect top to GND.
+\draw (0,0) to[I,l={$I_1$}] (0,3) -- (6,3)
+      to[R,l={$R_2$}] (6,0) -- (0,0);
+\draw (3,3) node[circ] {} to[R,l={$R_1$},i>^=$i_R$] (3,0) node[circ] {};
+\draw (0,0) node[ground] {};
+\end{circuitikz}
+\end{document}

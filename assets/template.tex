@@ -1,11 +1,13 @@
 \documentclass[border=10pt]{standalone}
-\usepackage[european]{circuitikz}
 \usepackage{amsmath}
-\usepackage{ctex} % Support for Chinese characters if needed in labels
-
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
 \begin{document}
-\begin{circuitikz}[american voltages, american currents]
-    % Circuit description goes here
-    % Example: \draw (0,0) to[R, l=$R$] (2,0);
+\begin{circuitikz}
+% Replace this closed source-resistor loop with the requested topology.
+% V1: positive at supply; R1: supply -> return (via the lower wire).
+\coordinate (return) at (0,0);
+\coordinate (supply) at (0,3);
+\draw (return) to[V,invert,l={$V_1$}] (supply)
+      to[R,l={$R_1$}] (4,3) -- (4,0) -- (return);
 \end{circuitikz}
 \end{document}

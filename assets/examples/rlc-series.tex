@@ -1,0 +1,11 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% One loop: source -> R1 -> L1 -> C1 -> source return.
+\draw (0,0) to[V,invert,l={$V_1$}] (0,3)
+      to[R,l={$R_1$}] (3,3) to[L,l={$L_1$}] (6,3)
+      to[C,l={$C_1$}] (6,0) -- (0,0);
+\end{circuitikz}
+\end{document}

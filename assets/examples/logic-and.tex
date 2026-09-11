@@ -1,0 +1,12 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% A -> U1.in 1; B -> U1.in 2; U1.out -> Y.
+\node[and port] (U1) at (3,2) {};
+\draw (U1.in 1) -- ++(-1,0) node[ocirc,label=left:$A$] {};
+\draw (U1.in 2) -- ++(-1,0) node[ocirc,label=left:$B$] {};
+\draw (U1.out) -- ++(1,0) node[ocirc,label=right:$Y$] {};
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,12 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% Nets: input=R1.1; out=R1.2=C1.1; C1.2=GND. Input is an open port.
+\draw (0,3) node[ocirc,label=left:$V_{in}$] {}
+      to[R,l={$R_1=1\,\mathrm{k}\Omega$}] (4,3) coordinate (out)
+      -- (6,3) node[ocirc,label=right:$V_{out}$] {};
+\draw (out) node[circ] {} to[C,l={$C_1=100\,\mathrm{nF}$}] (4,0) node[ground] {};
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,18 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% Four distinct nets: top, left-mid, right-mid, bottom.
+% R5 joins the two midpoint nets; no direct wire shorts it.
+\coordinate (top) at (2,5);
+\coordinate (leftmid) at (2,2.5);
+\coordinate (rightmid) at (6,2.5);
+\coordinate (bottom) at (2,0);
+\draw (0,0) to[V,invert,l={$V_1$}] (0,5) -- (top) -- (6,5)
+      to[R,l={$R_3$}] (rightmid) to[R,l={$R_4$}] (6,0) -- (bottom) -- (0,0);
+\draw (top) node[circ] {} -- (2,5) to[R,l_={$R_1$}] (leftmid)
+      to[R,l_={$R_2$}] (2,0) -- (bottom) node[circ] {};
+\draw (leftmid) node[circ] {} to[R,l={$R_5$}] (rightmid) node[circ] {};
+\end{circuitikz}
+\end{document}

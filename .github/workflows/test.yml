@@ -1,0 +1,40 @@
+name: Circuit skill validation
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unit:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.9', '3.12']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest discover -s tests -p test_compile.py -v
+      - run: python -m unittest discover -s tests -p test_resources.py -v
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install actual rendering dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-extra texlive-pictures texlive-xetex texlive-luatex texlive-lang-chinese poppler-utils
+      - name: Exercise real engines, converters, and Chinese fonts
+        env:
+          CIRCUIT_RUN_INTEGRATION: '1'
+          CIRCUIT_TEST_ENGINES: pdflatex,xelatex,lualatex
+          CIRCUIT_TEST_CHINESE: '1'
+        run: python -m unittest discover -s tests -v

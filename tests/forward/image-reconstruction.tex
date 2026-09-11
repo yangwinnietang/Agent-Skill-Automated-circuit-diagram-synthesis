@@ -1,0 +1,38 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% Nets: supply = V1 positive; 0 = grounded return; A and B = divider midpoints.
+% D1 anode = A, cathode = B. Vout is an open external terminal on B.
+\coordinate (return) at (0,0);
+\coordinate (supply) at (0,6);
+\coordinate (r1top) at (3,6);
+\coordinate (A) at (3,3);
+\coordinate (r2bottom) at (3,0);
+\coordinate (capTop) at (5,3);
+\coordinate (capBottom) at (5,0);
+\coordinate (r3top) at (9,6);
+\coordinate (B) at (9,3);
+\coordinate (r4bottom) at (9,0);
+\coordinate (out) at (11,3);
+\draw (return) to[V,invert,l={$V_1=12\,\mathrm{V}$}] (supply);
+\draw (supply) -- (r1top) -- (r3top);
+\draw (r1top) to[R,l_={$R_1=1\,\mathrm{k}\Omega$}] (A)
+      to[R,l_={$R_2=2.2\,\mathrm{k}\Omega$}] (r2bottom);
+\draw (r3top) to[R,l={$R_3=4.7\,\mathrm{k}\Omega$}] (B)
+      to[R,l={$R_4=10\,\mathrm{k}\Omega$}] (r4bottom);
+\draw (return) -- (r2bottom) -- (capBottom) -- (r4bottom);
+\draw (A) -- (capTop) to[D,l={$D_1$}] (B) -- (out) node[ocirc] {} node[right] {$V_{out}$};
+\draw (capTop) to[C,l={$C_1=100\,\mathrm{nF}$}] (capBottom);
+\draw (return) -- ++(0,-0.4) node[ground] {};
+\node[circ] at (r1top) {};
+\node[circ] at (A) {};
+\node[above left] at (A) {$A$};
+\node[circ] at (B) {};
+\node[above right] at (B) {$B$};
+\node[circ] at (capTop) {};
+\node[circ] at (r2bottom) {};
+\node[circ] at (capBottom) {};
+\end{circuitikz}
+\end{document}

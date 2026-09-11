@@ -1,0 +1,24 @@
+\documentclass[border=12pt]{standalone}
+\usepackage{amsmath}
+\usepackage[american resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% Four nets: TOP, A, B, BOTTOM. No ground was requested.
+% R1: TOP-A; R2: A-BOTTOM; R3: TOP-B; R4: B-BOTTOM;
+% R5: A-B; V1: positive TOP, negative BOTTOM.
+% Resistor values unspecified by the user, left symbolic.
+\coordinate (top) at (2,5);
+\coordinate (leftmid) at (2,2.5);
+\coordinate (rightmid) at (6,2.5);
+\coordinate (bottom) at (2,0);
+\draw (0,0) to[V,invert,l={$V_1=5\,\mathrm{V}$}] (0,5)
+      -- (top) -- (6,5)
+      to[R,l=$R_3$] (rightmid)
+      to[R,l=$R_4$] (6,0) -- (bottom) -- (0,0);
+\draw (top) node[circ] {}
+      to[R,l_=$R_1$] (leftmid)
+      to[R,l_=$R_2$] (bottom) node[circ] {};
+\draw (leftmid) node[circ,label=above left:$A$] {}
+      to[R,l=$R_5$] (rightmid) node[circ,label=above right:$B$] {};
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,13 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{amsmath}
+\usepackage[european resistors,american inductors,american voltages,american currents]{circuitikz}
+\begin{document}
+\begin{circuitikz}
+% Left: A-B and C-D are separate nets. Right: E,F,G,H share one net.
+\draw (0,0) node[ocirc,label=below:$C$] {} -- (0,4) node[ocirc,label=above:$D$] {};
+\draw (-2,2) node[ocirc,label=left:$A$] {} to[crossing] (2,2) node[ocirc,label=right:$B$] {};
+\draw (4,2) node[ocirc,label=left:$E$] {} -- (8,2) node[ocirc,label=right:$F$] {};
+\draw (6,0) node[ocirc,label=below:$G$] {} -- (6,2) node[circ] {}
+      -- (6,4) node[ocirc,label=above:$H$] {};
+\end{circuitikz}
+\end{document}

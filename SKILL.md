@@ -1,52 +1,52 @@
 ---
 name: circuit-diagram-generator
-description: Generates precise circuit diagrams using LaTeX and CircuiTikZ. Use when the user requests to draw circuit diagrams from descriptions or images, especially for academic, exam, or publication purposes.
+description: Create or reconstruct electrical schematics from text, circuit photos, or existing LaTeX using CircuiTikZ. Deliver editable TeX and verified PDF, SVG, or PNG diagrams for reports, teaching, and publications. Use for schematic drawing, not PCB layout or circuit simulation.
 ---
 
 # Circuit Diagram Generator
 
-## Workflow
+Generate the requested circuit with correct connectivity first, then refine its layout. The agent interprets the input and writes TeX; the scripts compile it. Compilation does not prove electrical correctness.
 
-1.  **Analyze Input**:
-    *   If text: Parse the circuit topology (nodes, components, connections).
-    *   If image: Use vision capabilities to identify components, labels, and layout. Note the specific shapes (e.g., rectangle vs. zig-zag resistors).
-2.  **Generate Code**:
-    *   Construct a complete LaTeX document using the template in `assets/template.tex`.
-    *   **CRITICAL**: Ensure `\usepackage[european]{circuitikz}` is used to produce rectangular resistors.
-    *   Map components to `circuitikz` commands (e.g., `R` for resistor, `L` for inductor, `C` for capacitor, `V`/`I` for sources).
-3.  **Compile & Output**:
-    *   Save the code to a `.tex` file.
-    *   Compile to PDF using `pdflatex`.
-    *   Convert to SVG using `pdf2svg` (if available) for web viewing.
+## 1. Resolve topology before drawing
 
-## CircuiTikZ Guidelines
+- Identify components, values/units, named nets, terminal connections, source polarities, current reference directions, and open terminals. For branched circuits or images, make a compact connection table: `component | pin/terminal | net`. Treat geometric bends on a continuous wire as the same net.
+- Preserve the requested circuit, including intentionally open or unusual connections. Do not add a ground, supply, load, component value, or return wire just to make the diagram look conventional. Clearly state any assumption that affects connectivity or polarity; ask when it cannot be resolved from the input.
+- For images, inspect the actual image before transcribing it. Distinguish junction dots from wire crossings, open terminals, and compression artifacts. Preserve readable labels and symbol style. Record unreadable labels as unknown; request a crop or clarification for ambiguous connections. Do not describe an uncertain transcription as exact. See [image reconstruction](references/image-reconstruction.md).
+- Use explicit terminal names for multi-pin devices: op-amp `+`, `-`, `out`, supply pins; BJT `B/C/E`; MOSFET `G/D/S/B` when shown. A device center is not a pin. Do not infer a real package pinout from the generic schematic symbol.
 
-### Preamble
-Always start with:
-```latex
-\documentclass[border=10pt]{standalone}
-\usepackage[european]{circuitikz}
-\usepackage{amsmath}
-\begin{document}
-\begin{circuitikz}[american voltages]
-% Circuit code here
-\end{circuitikz}
-\end{document}
+## 2. Write editable CircuiTikZ
+
+Resolve all bundled paths relative to this SKILL.md, not the user's current directory. Keep generated files in the task's output directory, outside the installed skill.
+
+- Start with [assets/template.tex](assets/template.tex). Its loop is an example: replace it with the requested topology. Default to rectangular resistors when style is unspecified, but honor user or image choices. Use component-specific style options; `american voltages` alone does not select all American symbols. Do not claim the default meets every publication or electrical-symbol standard.
+- For Chinese labels, start with [assets/template-zh.tex](assets/template-zh.tex) and use `--engine xelatex`. It requires `ctex` and Fandol fonts. Other Unicode text needs a font that actually contains its glyphs; changing engine alone is insufficient.
+- Use named coordinates for repeated connection points and named device anchors for pins. Mark actual branch junctions explicitly. Avoid ambiguous four-way crossings; route unconnected wires apart or use an explicit wire jump. Never let a routing change alter the connection table.
+- Put electrical quantities in math mode and units upright, e.g. `l={$R_1=10\,\mathrm{k}\Omega$}`. Wrap label values in braces to protect embedded equals signs or commas from PGF parsing. Escape literal TeX characters in user labels (`%`, `&`, `_`, `#`, braces); do not insert arbitrary label text as executable TeX.
+- Source orientation, `invert`, voltage annotations and current arrows interact. Verify the rendered signs/arrows against the intended terminal table, especially after reversing or rotating a path. Consult [references/reference.md](references/reference.md) for syntax and component examples; use the linked official manual for unfamiliar symbols.
+- Use `python <skill-dir>/scripts/example.py --list` to find complete, runnable examples (divider, bridge, RC/RLC, diode, transistor, op-amp, logic, crossings). Adapt them only when their topology fits.
+
+## 3. Compile and inspect
+
+Check the actual toolchain when it is unknown:
+
+```bash
+python <skill-dir>/scripts/compile_circuit.py --check
 ```
 
-### Component Mapping
-| Component | Style | Code Example |
-|-----------|-------|--------------|
-| Resistor (Rectangular) | `european` (global) | `\draw (0,0) to[R, l=$R_{ab}$] (2,0);` |
-| Voltage Source | American | `\draw (0,0) to[V, v=$U$] (0,2);` |
-| Current Source | American | `\draw (0,0) to[I, i=$I$] (2,0);` |
-| Node | Dot | `\node[circ] at (2,2) {};` |
+Compile with an explicit output directory and requested formats:
 
-### Best Practices
-- **Labels**: Use LaTeX math mode for labels (e.g., `l=$R_{12}$`).
-- **Topology**: For bridge circuits, calculate coordinates carefully or use relative positioning `++(x,y)`.
-- **Direction**: Pay attention to current arrows `i=` and voltage polarities `v=`.
+```bash
+python <skill-dir>/scripts/compile_circuit.py /path/to/circuit.tex \
+  --output-dir /path/to/output --format svg --format png
+```
 
-## Resources
+PDF is always produced. SVG/PNG require Poppler (`pdftocairo`, `pdfinfo`); SVG also supports `pdf2svg` plus `pdfinfo`. Default output is PDF only. Use `--engine xelatex` for the Chinese template, `--timeout` for a justified per-command limit, and `--dpi` for PNG resolution.
 
-- `assets/template.tex`: Base template.
+- On failure, read the reported `.compile.log`, fix the actual cause, and rerun. Stop after three failed repair attempts and report the blocker plus editable source; do not silently change connectivity or substitute a missing component. Missing dependencies may require installation appropriate to the environment; see [README.md](README.md).
+- Only report output paths from a successful run. Older outputs are preserved on compilation/conversion failure and may be stale. Requested export failures return nonzero; never report a missing SVG as delivered. SVG/PNG export rejects multi-page PDFs rather than dropping pages.
+- Open the rendered PNG or PDF with available image/PDF viewing tools. Check component identity/count, wire endpoints and junctions against the connection table; then polarity, arrows, labels, clipping, spacing, and crossings. Trace each branch rather than relying on visual similarity. A successful process exit checks rendering, not these properties.
+- If rendering or viewing is unavailable, deliver TeX with the precise limitation and instructions to compile; do not claim visual verification. The compiler is not a sandbox for hostile TeX; inspect untrusted source and use an isolated environment when needed.
+
+## 4. Deliver
+
+Provide editable `.tex` and requested successful renderings. Briefly state assumptions, unresolved image details, and which checks actually ran. For complex reconstructions, include the connection table so the user can audit the topology. Keep simulation, PCB layout, and design certification separate from schematic rendering.
