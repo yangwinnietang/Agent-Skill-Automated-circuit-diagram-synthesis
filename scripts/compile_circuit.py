@@ -148,11 +148,20 @@ def build(tex_file, *, output_dir=None, engine="pdflatex", formats=("pdf",),
                     if "Missing character:" in log_text:
                         raise BuildError("Missing glyphs in output; choose a font/engine that covers the labels.")
                     if converters:
-                        _run([info, str(pdf)], source.parent, log, timeout)
-                        log.flush()
-                        pages = re.findall(r"^Pages:\s+(\d+)\s*$", raw_log.read_text(errors="replace"), re.M)
-                        if not pages or int(pages[-1]) != 1:
-                            raise BuildError("SVG/PNG export requires exactly one PDF page; split the document first.")
+                        # Parse pdfinfo's own output, not a mixed multi-command log.
+                        info_path = work / "pdfinfo.log"
+                        try:
+                            with info_path.open("wb") as info_log:
+                                _run([info, str(pdf)], source.parent, info_log, timeout)
+                        finally:
+                            if info_path.exists():
+                                log.write(info_path.read_bytes())
+                                log.flush()
+                        pages = re.findall(r"^Pages:\s+(\d+)\s*$", info_path.read_text(errors="replace"), re.M)
+                        if len(pages) != 1:
+                            raise BuildError("Could not determine PDF page count from pdfinfo output.")
+                        if int(pages[0]) != 1:
+                            raise BuildError(f"SVG/PNG export requires exactly one PDF page; received {pages[0]}. Split the document first.")
                     generated = {"pdf": pdf}
                     for kind, executable in converters.items():
                         artifact = work / f"circuit.{kind}"

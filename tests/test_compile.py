@@ -48,6 +48,9 @@ class BuildTests(unittest.TestCase):
             if self.mode == 'warning':
                 log.write(b'LaTeX Warning: unresolved reference\n')
         elif tool == 'pdfinfo':
+            if self.mode == 'no-page-count':
+                log.write(b'Unexpected tool output\n')
+                return
             log.write(b'Pages: 2\n' if self.mode == 'multipage' else b'Pages: 1\n')
         else:
             if self.mode == 'convert-fail':
@@ -191,10 +194,16 @@ class BuildTests(unittest.TestCase):
             self.build(formats=('svg',))
         self.assertFalse((self.output / 'diagram.pdf').exists())
 
+    def test_unreadable_page_count_is_not_misreported_as_multipage(self):
+        self.mode = 'no-page-count'
+        with self.assertRaisesRegex(cc.BuildError, 'Could not determine PDF page count'):
+            self.build(formats=('svg',))
+        self.assertIn('Unexpected tool output', (self.output / 'diagram.compile.log').read_text())
+
     def test_safe_invocation_and_source_cwd(self):
         self.build(passes=1)
         command, cwd = self.calls[0]
-        self.assertEqual(cwd, self.source.parent)
+        self.assertEqual(cwd, self.source.parent.resolve())
         self.assertIn('-no-shell-escape', command)
         self.assertIn('-halt-on-error', command)
         self.assertIn('-interaction=nonstopmode', command)

@@ -18,7 +18,7 @@ CIRCUIT_TEST_CHINESE=1 \
 python -m unittest discover -s tests -v
 ```
 
-There are 42 fast test methods and 13 integration methods. One integration method
+There are 43 fast test methods and 13 integration methods. One integration method
 runs **17 complete documents per selected engine**, with PDF, SVG and PNG for each.
 The corpus contains 12 component/topology examples, the default template, a known
 image fixture, and 3 diagrams independently authored by agents using the skill.
@@ -70,7 +70,7 @@ LuaLaTeX dependencies; these were provisioned in an isolated local TeX tree.
 Normal installations should use their distribution package manager, not mix
 current CTAN language packages into an older LaTeX kernel.
 
-- Fast checks: 42 methods passed.
+- Fast checks: 43 methods passed.
 - Initial corrected real suite: pdfLaTeX and XeLaTeX, all 12 examples plus template
   passed; the 49-method suite at that point passed with its optional Chinese test
   disabled. The expanded corpus and additional regressions are included in CI.
@@ -79,6 +79,12 @@ current CTAN language packages into an older LaTeX kernel.
   rejection passed. Chinese template compiled to PDF/SVG/PNG and was visually read.
 - Manual visual review covered all 12 example layouts, both text-generated
   diagrams, the reference image and the independently reconstructed image.
+
+The initial CI run found a Windows-only test assertion issue: a temporary path in
+8.3 short-name form was compared with its resolved long form. The assertion now
+compares resolved paths. Local extended runs also exposed an undetermined page
+count being reported as a multi-page document; pdfinfo output is now parsed
+separately and reports the exact failure category.
 
 The full final CI run is the authoritative fresh-install and cross-platform
 record; its status is available on the pull request. The workflow runs Python
