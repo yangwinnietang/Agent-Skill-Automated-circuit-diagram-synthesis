@@ -1,0 +1,19 @@
+Title: series-rlc: series rlc, output across resistor
+Date: Sat Sep 12 09:16:47  2026
+Plotname: Operating Point
+Flags: real
+No. Variables: 5
+No. Points: 1
+Variables:
+	0	v(vin)	voltage
+	1	i(l1)	current
+	2	v(lc)	voltage
+	3	v(rl)	voltage
+	4	i(v1)	current
+Values:
+ 0	1.000000000000000e+00
+	0.000000000000000e+00
+	1.000000000000000e+00
+	1.000000000000000e+00
+	0.000000000000000e+00
+

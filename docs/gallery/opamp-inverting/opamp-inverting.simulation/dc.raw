@@ -1,0 +1,19 @@
+Title: opamp-inverting: inverting amplifier
+Date: Sat Sep 12 09:16:21  2026
+Plotname: Operating Point
+Flags: real
+No. Variables: 5
+No. Points: 1
+Variables:
+	0	v(out)	voltage
+	1	i(eu1)	current
+	2	v(sum)	voltage
+	3	i(v1)	current
+	4	v(vin)	voltage
+Values:
+ 0	-9.999890001209989e-01
+	9.999900001099991e-06
+	9.999890001209989e-07
+	-9.999900001099988e-06
+	1.000000000000000e-01
+

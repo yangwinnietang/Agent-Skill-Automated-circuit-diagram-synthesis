@@ -28,11 +28,22 @@ class BuildResult:
     warnings: list
 
 
+def _print_message(message, *, file=None):
+    """Report Unicode paths even on consoles with a narrower encoding."""
+    stream = sys.stdout if file is None else file
+    encoding = getattr(stream, "encoding", None)
+    if encoding:
+        message = message.encode(encoding, errors="backslashreplace").decode(encoding)
+    print(message, file=stream)
+
+
 def _tool(name):
     executable = shutil.which(name)
     if not executable:
         raise BuildError(f"Required command '{name}' not found on PATH. See README.md dependencies.")
-    return executable
+    # PATH entries may be relative to the caller's cwd. Commands run from the
+    # source directory, so preserve the discovered location before changing cwd.
+    return os.path.abspath(executable)
 
 
 def _run(command, cwd, log, timeout):
@@ -119,6 +130,7 @@ def build(tex_file, *, output_dir=None, engine="pdflatex", formats=("pdf",),
         converters["svg"] = shutil.which("pdftocairo") or shutil.which("pdf2svg")
         if not converters["svg"]:
             raise BuildError("SVG requires pdftocairo (Poppler) or pdf2svg.")
+        converters["svg"] = os.path.abspath(converters["svg"])
     if "png" in formats:
         converters["png"] = _tool("pdftocairo")
     info = _tool("pdfinfo") if converters else None
@@ -137,8 +149,18 @@ def build(tex_file, *, output_dir=None, engine="pdflatex", formats=("pdf",),
                     command = [compiler, "-no-shell-escape", "-interaction=nonstopmode",
                                "-halt-on-error", "-file-line-error", "-jobname=circuit",
                                f"-output-directory={work}", str(staged)]
-                    for _ in range(passes):
-                        _run(command, source.parent, log, timeout)
+                    for pass_number in range(1, passes + 1):
+                        try:
+                            _run(command, source.parent, log, timeout)
+                        finally:
+                            # TeX can write diagnostics only to its transcript
+                            # (e.g. missing glyphs with tracinglostchars=1).
+                            transcript = work / "circuit.log"
+                            if transcript.is_file():
+                                log.write(f"\n--- TeX transcript, pass {pass_number} ---\n".encode())
+                                with transcript.open("rb") as stream:
+                                    shutil.copyfileobj(stream, log)
+                                log.flush()
                     pdf = work / "circuit.pdf"
                     _validate_artifact(pdf, "pdf")
                     log.flush()
@@ -192,13 +214,13 @@ def compile_circuit(tex_file, **options):
     try:
         result = build(tex_file, **options)
     except BuildError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
+        _print_message(f"Error: {exc}", file=sys.stderr)
         return False
     for kind, path in result.artifacts.items():
-        print(f"{kind.upper()}: {path}")
-    print(f"Log: {result.log}")
+        _print_message(f"{kind.upper()}: {path}")
+    _print_message(f"Log: {result.log}")
     for warning in result.warnings:
-        print(f"Warning: {warning}", file=sys.stderr)
+        _print_message(f"Warning: {warning}", file=sys.stderr)
     return True
 
 
@@ -210,8 +232,8 @@ def main(argv=None):
     parser.add_argument("--format", dest="formats", choices=("pdf", "svg", "png"), action="append",
                         help="Repeat for multiple outputs; PDF is always retained (default: PDF only).")
     parser.add_argument("--timeout", type=float, default=60, help="Seconds per command (default: 60).")
-    parser.add_argument("--passes", type=int, default=2, help="LaTeX passes, 1–3 (default: 2).")
-    parser.add_argument("--dpi", type=int, default=180, help="PNG resolution, 36–1200 (default: 180).")
+    parser.add_argument("--passes", type=int, default=2, help="LaTeX passes, 1-3 (default: 2).")
+    parser.add_argument("--dpi", type=int, default=180, help="PNG resolution, 36-1200 (default: 180).")
     parser.add_argument("--check", action="store_true", help="Actually compile the bundled template to check the toolchain.")
     args = parser.parse_args(argv)
     if args.check and args.tex_file:
@@ -226,13 +248,13 @@ def main(argv=None):
             try:
                 result = build(template, output_dir=temp, **options)
             except BuildError as exc:
-                print(f"Toolchain check failed: {exc}", file=sys.stderr)
+                _print_message(f"Toolchain check failed: {exc}", file=sys.stderr)
                 for log in Path(temp).glob("*.compile.log"):
-                    print(log.read_text(encoding="utf-8", errors="replace")[-6000:], file=sys.stderr)
+                    _print_message(log.read_text(encoding="utf-8", errors="replace")[-6000:], file=sys.stderr)
                 return 1
-            print(f"Toolchain check passed: {args.engine}; {', '.join(result.artifacts)}.")
+            _print_message(f"Toolchain check passed: {args.engine}; {', '.join(result.artifacts)}.")
             for warning in result.warnings:
-                print(f"Warning: {warning}", file=sys.stderr)
+                _print_message(f"Warning: {warning}", file=sys.stderr)
         return 0
     return 0 if compile_circuit(args.tex_file, output_dir=args.output_dir, **options) else 1
 

@@ -1,0 +1,119 @@
+{
+  "generated_utc": "2026-09-12T15:16:03.600868+00:00",
+  "engine": "pdflatex",
+  "status": "pass",
+  "case_count": 12,
+  "analysis_count": 24,
+  "measurement_count": 81,
+  "maximum_absolute_error_v": 1.5686563159533762e-11,
+  "cases": [
+    {
+      "id": "bridge-balanced",
+      "status": "pass",
+      "spec_sha256": "9decf34ea594211195e3e4e1d6980b82c8145e2d39d3a58ee90858c000364092",
+      "analyses": 1,
+      "measurements": 4,
+      "maximum_absolute_error_v": 8.881784197001252e-16,
+      "report": "bridge-balanced/bridge-balanced.simulation/report.json"
+    },
+    {
+      "id": "bridge-unbalanced",
+      "status": "pass",
+      "spec_sha256": "e4526b379e7fef90b5ad6339191adba82a91411db94ca732f28742fbdb0181e9",
+      "analyses": 1,
+      "measurements": 4,
+      "maximum_absolute_error_v": 4.440892098500626e-16,
+      "report": "bridge-unbalanced/bridge-unbalanced.simulation/report.json"
+    },
+    {
+      "id": "divider-loaded",
+      "status": "pass",
+      "spec_sha256": "610f69083f30ecd2bd55e191bc77f14fa96c932b9eb11e11ce2317554b59bcdc",
+      "analyses": 1,
+      "measurements": 3,
+      "maximum_absolute_error_v": 2.220446049250313e-16,
+      "report": "divider-loaded/divider-loaded.simulation/report.json"
+    },
+    {
+      "id": "divider-unloaded",
+      "status": "pass",
+      "spec_sha256": "9767f78125e0fe938583bf5305d7550d4ab369e91c2ee96895de199fda8459c3",
+      "analyses": 1,
+      "measurements": 3,
+      "maximum_absolute_error_v": 0.0,
+      "report": "divider-unloaded/divider-unloaded.simulation/report.json"
+    },
+    {
+      "id": "opamp-inverting",
+      "status": "pass",
+      "spec_sha256": "8ecd732ad8e6832643920098e6fb2d5298e7f8524b0b53e963a145ae0e7eb93a",
+      "analyses": 1,
+      "measurements": 4,
+      "maximum_absolute_error_v": 2.220446049250313e-16,
+      "report": "opamp-inverting/opamp-inverting.simulation/report.json"
+    },
+    {
+      "id": "opamp-noninverting",
+      "status": "pass",
+      "spec_sha256": "2ecb1f9f5f7b2fe7ad77457978f4fd7748289da18d122fe8870fee4fb3bf74ba",
+      "analyses": 1,
+      "measurements": 4,
+      "maximum_absolute_error_v": 1.5686563159533762e-11,
+      "report": "opamp-noninverting/opamp-noninverting.simulation/report.json"
+    },
+    {
+      "id": "opamp-summer",
+      "status": "pass",
+      "spec_sha256": "703863bfcdda84cb70a4f8d4d3af1587b07b23af92d4436e7ca40456b4abafea",
+      "analyses": 1,
+      "measurements": 5,
+      "maximum_absolute_error_v": 5.551115123125783e-17,
+      "report": "opamp-summer/opamp-summer.simulation/report.json"
+    },
+    {
+      "id": "parallel-current",
+      "status": "pass",
+      "spec_sha256": "81f7f20bf7ccfadc2c54bc2d81fc08a92ac11a5931122455aa3dd1d055f90c27",
+      "analyses": 1,
+      "measurements": 2,
+      "maximum_absolute_error_v": 0.0,
+      "report": "parallel-current/parallel-current.simulation/report.json"
+    },
+    {
+      "id": "rc-highpass",
+      "status": "pass",
+      "spec_sha256": "6e074e4a28e568054b5a93f9eac5a9940ecfe7ef0e327fac38b82f3184817b1a",
+      "analyses": 4,
+      "measurements": 12,
+      "maximum_absolute_error_v": 1.1443916996305594e-16,
+      "report": "rc-highpass/rc-highpass.simulation/report.json"
+    },
+    {
+      "id": "rc-lowpass",
+      "status": "pass",
+      "spec_sha256": "56ffac14383104063658dc82ab5d9829875bfc97608621b675dde2909b3bcabf",
+      "analyses": 4,
+      "measurements": 12,
+      "maximum_absolute_error_v": 5.594315114139762e-17,
+      "report": "rc-lowpass/rc-lowpass.simulation/report.json"
+    },
+    {
+      "id": "rl-lowpass",
+      "status": "pass",
+      "spec_sha256": "cdf11711a1ac296bb4e791f55a5e309e2609f3d1132e67e6fb08d0abb5a98ef1",
+      "analyses": 4,
+      "measurements": 12,
+      "maximum_absolute_error_v": 5.551115123125783e-17,
+      "report": "rl-lowpass/rl-lowpass.simulation/report.json"
+    },
+    {
+      "id": "series-rlc",
+      "status": "pass",
+      "spec_sha256": "b0419cd266237190367d253c3307c859626fb46e050fa9123223134224cb0c76",
+      "analyses": 4,
+      "measurements": 16,
+      "maximum_absolute_error_v": 1.0436096431476476e-16,
+      "report": "series-rlc/series-rlc.simulation/report.json"
+    }
+  ]
+}

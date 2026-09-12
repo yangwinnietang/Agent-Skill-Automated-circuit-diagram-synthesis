@@ -1,0 +1,139 @@
+{
+  "id": "divider-unloaded",
+  "title": "Unloaded voltage divider",
+  "category": "DC networks",
+  "nodes": {
+    "VP": {
+      "net": "vcc",
+      "at": [
+        0,
+        4
+      ]
+    },
+    "VG": {
+      "net": "0",
+      "at": [
+        0,
+        0
+      ]
+    },
+    "TOP": {
+      "net": "vcc",
+      "at": [
+        4,
+        4
+      ]
+    },
+    "MID": {
+      "net": "out",
+      "at": [
+        4,
+        2
+      ]
+    },
+    "BOT": {
+      "net": "0",
+      "at": [
+        4,
+        0
+      ]
+    },
+    "OUT": {
+      "net": "out",
+      "at": [
+        6,
+        2
+      ]
+    }
+  },
+  "components": [
+    {
+      "ref": "V1",
+      "kind": "V",
+      "value": 5,
+      "pins": [
+        "VP",
+        "VG"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rtop",
+      "kind": "R",
+      "value": 10000,
+      "pins": [
+        "TOP",
+        "MID"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rbottom",
+      "kind": "R",
+      "value": 10000,
+      "pins": [
+        "MID",
+        "BOT"
+      ],
+      "label_side": "above"
+    }
+  ],
+  "wires": [
+    [
+      "VP",
+      "TOP"
+    ],
+    [
+      "VG",
+      "BOT"
+    ],
+    [
+      "MID",
+      "OUT"
+    ]
+  ],
+  "grounds": [
+    "VG"
+  ],
+  "junctions": [
+    "MID"
+  ],
+  "ports": [
+    {
+      "point": "OUT",
+      "label": "Vout"
+    }
+  ],
+  "analysis": {
+    "dc": true,
+    "ac_hz": [],
+    "measurements": [
+      {
+        "name": "V_vcc",
+        "positive": "vcc",
+        "negative": "0"
+      },
+      {
+        "name": "V_out",
+        "positive": "out",
+        "negative": "0"
+      },
+      {
+        "name": "output",
+        "positive": "out",
+        "negative": "0"
+      }
+    ]
+  },
+  "expected": {
+    "dc": {
+      "V_vcc": 5,
+      "V_out": 2.5,
+      "output": 2.5
+    },
+    "ac": []
+  },
+  "notes": [
+    "Unloaded ideal divider: Vout = 5 V times 10 kOhm / 20 kOhm = 2.5 V."
+  ]
+}

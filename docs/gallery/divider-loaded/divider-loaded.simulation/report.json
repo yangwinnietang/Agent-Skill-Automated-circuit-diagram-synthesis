@@ -1,0 +1,53 @@
+{
+  "case_id": "divider-loaded",
+  "title": "Loaded voltage divider",
+  "status": "pass",
+  "model": "ideal linear components; signal-only finite-gain opamps",
+  "tolerances": {
+    "absolute_v": 1e-09,
+    "relative": 1e-06
+  },
+  "runs": [
+    {
+      "analysis": "dc",
+      "frequency_hz": null,
+      "status": "pass",
+      "artifacts": {
+        "netlist": "dc.cir",
+        "raw": "dc.raw",
+        "log": "dc.log"
+      },
+      "measurements": {
+        "V_vcc": {
+          "actual": 5.0,
+          "expected": 5,
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 5.000999999999999e-06,
+          "passed": true
+        },
+        "V_out": {
+          "actual": 1.666666666666667,
+          "expected": 1.6666666666666667,
+          "absolute_error_v": 2.220446049250313e-16,
+          "allowed_error_v": 1.6676666666666667e-06,
+          "passed": true
+        },
+        "output": {
+          "actual": 1.666666666666667,
+          "expected": 1.6666666666666667,
+          "absolute_error_v": 2.220446049250313e-16,
+          "allowed_error_v": 1.6676666666666667e-06,
+          "passed": true
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "simulator": {
+    "executable": "/workspace/scratch/d265da16246a/tex-runtime/bin/ngspice",
+    "version": "42",
+    "version_output": "******\n** ngspice-42 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2023, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at http://ngspice.sourceforge.net/bugrep.html\n** Creation Date: Sun Mar 31 20:15:14 UTC 2024\n******",
+    "version_exit_code": 0
+  },
+  "spec_sha256": "610f69083f30ecd2bd55e191bc77f14fa96c932b9eb11e11ce2317554b59bcdc"
+}

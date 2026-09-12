@@ -1,0 +1,39 @@
+\documentclass[border=12pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage[europeanresistors,americanvoltages,americancurrents,americaninductors]{circuitikz}
+\definecolor{circuitink}{HTML}{20334A}
+\begin{document}
+% Generated from validated JSON; edit the JSON to keep SPICE in sync.
+% V pins: [positive, negative]; I pins: [arrow from, arrow to].
+\begin{circuitikz}[color=circuitink,thick,font=\small]
+\node[op amp] (DU1) at (6,3) {$U_{\mathrm{1}}$};
+\coordinate (PUP) at (DU1.+);
+\coordinate (PUM) at (DU1.-);
+\coordinate (PUO) at (DU1.out);
+\coordinate (PVP) at (5,1.5);
+\coordinate (PVG) at (5,0);
+\coordinate (PSUM) at (3,3.5);
+\coordinate (PRG) at (3,0);
+\coordinate (PFBLEFT) at (3,5.5);
+\coordinate (PFBRIGHT) at (8,5.5);
+\coordinate (POUT) at (8,3);
+\coordinate (PPROBE) at (9.5,3);
+\draw (PVG) to[V,invert,l^={\shortstack{$V_{\mathrm{1}}$\\$100\,\mathrm{m}\mathrm{V}$}}] (PVP);
+\draw (PSUM) to[R,l^={\shortstack{$R_{\mathrm{g}}$\\$10\,\mathrm{k}\Omega$}}] (PRG);
+\draw (PFBLEFT) to[R,l^={\shortstack{$R_{\mathrm{f}}$\\$100\,\mathrm{k}\Omega$}}] (PFBRIGHT);
+\draw (PVP) -| (PUP);
+\draw (PSUM) -| (PUM);
+\draw (PSUM) -- (PFBLEFT);
+\draw (PUO) -| (POUT);
+\draw (POUT) -- (PPROBE);
+\draw (POUT) -- (PFBRIGHT);
+\draw (PVG) node[ground] {};
+\draw (PRG) node[ground] {};
+\node[circ] at (PSUM) {};
+\node[circ] at (POUT) {};
+\draw (PVP) node[ocirc] {} node[above right] {Vin};
+\draw (PPROBE) node[ocirc] {} node[above right] {Vout};
+\end{circuitikz}
+\end{document}

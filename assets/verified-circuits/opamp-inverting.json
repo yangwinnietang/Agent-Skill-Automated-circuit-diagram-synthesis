@@ -1,0 +1,205 @@
+{
+  "id": "opamp-inverting",
+  "title": "Inverting amplifier",
+  "category": "Ideal opamp circuits",
+  "nodes": {
+    "UP": {
+      "net": "0",
+      "anchor": "U1.plus"
+    },
+    "UM": {
+      "net": "sum",
+      "anchor": "U1.minus"
+    },
+    "UO": {
+      "net": "out",
+      "anchor": "U1.out"
+    },
+    "VP": {
+      "net": "vin",
+      "at": [
+        0,
+        2.5
+      ]
+    },
+    "VG": {
+      "net": "0",
+      "at": [
+        0,
+        0
+      ]
+    },
+    "SUM": {
+      "net": "sum",
+      "at": [
+        3,
+        2.5
+      ]
+    },
+    "FBLEFT": {
+      "net": "sum",
+      "at": [
+        3,
+        4.5
+      ]
+    },
+    "FBRIGHT": {
+      "net": "out",
+      "at": [
+        7,
+        4.5
+      ]
+    },
+    "OUT": {
+      "net": "out",
+      "at": [
+        7,
+        2
+      ]
+    },
+    "PROBE": {
+      "net": "out",
+      "at": [
+        8.5,
+        2
+      ]
+    },
+    "PG": {
+      "net": "0",
+      "at": [
+        3,
+        0
+      ]
+    }
+  },
+  "components": [
+    {
+      "ref": "U1",
+      "kind": "opamp",
+      "gain": 1000000.0,
+      "pins": [
+        "UP",
+        "UM",
+        "UO"
+      ],
+      "at": [
+        5,
+        2
+      ]
+    },
+    {
+      "ref": "V1",
+      "kind": "V",
+      "value": 0.1,
+      "pins": [
+        "VP",
+        "VG"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rin",
+      "kind": "R",
+      "value": 10000,
+      "pins": [
+        "VP",
+        "SUM"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rf",
+      "kind": "R",
+      "value": 100000,
+      "pins": [
+        "FBLEFT",
+        "FBRIGHT"
+      ],
+      "label_side": "above"
+    }
+  ],
+  "wires": [
+    [
+      "SUM",
+      "UM"
+    ],
+    [
+      "SUM",
+      "FBLEFT"
+    ],
+    [
+      "UO",
+      "OUT"
+    ],
+    [
+      "OUT",
+      "PROBE"
+    ],
+    [
+      "OUT",
+      "FBRIGHT"
+    ],
+    [
+      "UP",
+      "PG"
+    ]
+  ],
+  "grounds": [
+    "VG",
+    "PG"
+  ],
+  "junctions": [
+    "SUM",
+    "OUT"
+  ],
+  "ports": [
+    {
+      "point": "VP",
+      "label": "Vin"
+    },
+    {
+      "point": "PROBE",
+      "label": "Vout"
+    }
+  ],
+  "analysis": {
+    "dc": true,
+    "ac_hz": [],
+    "measurements": [
+      {
+        "name": "V_vin",
+        "positive": "vin",
+        "negative": "0"
+      },
+      {
+        "name": "V_sum",
+        "positive": "sum",
+        "negative": "0"
+      },
+      {
+        "name": "V_out",
+        "positive": "out",
+        "negative": "0"
+      },
+      {
+        "name": "output",
+        "positive": "out",
+        "negative": "0"
+      }
+    ]
+  },
+  "expected": {
+    "dc": {
+      "V_vin": 0.1,
+      "V_sum": 9.999890001209987e-07,
+      "V_out": -0.9999890001209987,
+      "output": -0.9999890001209987
+    },
+    "ac": []
+  },
+  "notes": [
+    "Signal-only ideal opamp: supply pins are intentionally omitted. SPICE uses Vout = 1e6 times (Vplus - Vminus).",
+    "Infinite-gain result: Vout = -10 Vin = -1 V. The finite-gain check expects -0.999989000121 V.",
+    "This model has no saturation, bandwidth, slew-rate, or output-current limits."
+  ]
+}

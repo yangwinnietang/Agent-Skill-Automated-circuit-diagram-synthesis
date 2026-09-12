@@ -1,0 +1,15 @@
+divider-loaded: Loaded voltage divider
+* Ideal linear signal model; opamps have no supply or output limits.
+V1 vcc 0 DC 5 AC 0
+Rtop vcc out 10000
+Rbottom out 0 10000
+Rload out 0 10000
+.op
+.control
+set filetype=ascii
+set numdgt=15
+run
+write result.raw all
+quit
+.endc
+.end

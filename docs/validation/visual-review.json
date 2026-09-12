@@ -1,0 +1,78 @@
+{
+  "scope": "Manual visual review of the 12 specified diagrams; no hardware certification",
+  "status": "pass",
+  "images": [
+    {
+      "circuit": "bridge-balanced",
+      "path": "docs/gallery/bridge-balanced/bridge-balanced.png",
+      "sha256": "16ea72111b76dc8bbd7f92f6d7aa6b033cbafcf58c8c28f559b07ddaec8713dc",
+      "status": "pass"
+    },
+    {
+      "circuit": "bridge-unbalanced",
+      "path": "docs/gallery/bridge-unbalanced/bridge-unbalanced.png",
+      "sha256": "bddbfe099b3a43fce62df1649afe354bee8d50b47d956809bb3e6f0efcbd4dd4",
+      "status": "pass"
+    },
+    {
+      "circuit": "divider-loaded",
+      "path": "docs/gallery/divider-loaded/divider-loaded.png",
+      "sha256": "305120531b8ed51742f7aeed0fc13fba7a06e9e5dbff04a14e2dd230301c5e8b",
+      "status": "pass"
+    },
+    {
+      "circuit": "divider-unloaded",
+      "path": "docs/gallery/divider-unloaded/divider-unloaded.png",
+      "sha256": "134eef57627e1a98d31dfe60babe9b1a7ff9d5058a268747f5c85303c5ff89b8",
+      "status": "pass"
+    },
+    {
+      "circuit": "opamp-inverting",
+      "path": "docs/gallery/opamp-inverting/opamp-inverting.png",
+      "sha256": "4ade9c3136f210670ffbe491c29ea69f7258839dee0f2117d6b1bd2c3aab26a0",
+      "status": "pass"
+    },
+    {
+      "circuit": "opamp-noninverting",
+      "path": "docs/gallery/opamp-noninverting/opamp-noninverting.png",
+      "sha256": "e9f83f9db81d2189ffa1c8f41a4ef4a84b543344219e511bb96fa08048aaa1c1",
+      "status": "pass"
+    },
+    {
+      "circuit": "opamp-summer",
+      "path": "docs/gallery/opamp-summer/opamp-summer.png",
+      "sha256": "8b56e7148200ecc48de25e63db6bb8abd94de234d7992712d646cc208c5cbd6b",
+      "status": "pass"
+    },
+    {
+      "circuit": "parallel-current",
+      "path": "docs/gallery/parallel-current/parallel-current.png",
+      "sha256": "03a1d9d599ea929e59a4cec8868bfe7397cc85ce04e1b16d6ee8d7985a839ca3",
+      "status": "pass"
+    },
+    {
+      "circuit": "rc-highpass",
+      "path": "docs/gallery/rc-highpass/rc-highpass.png",
+      "sha256": "0e271843d410e6594a757f09b8abf17129d65935c9c1dc25b86ac10dbec273e5",
+      "status": "pass"
+    },
+    {
+      "circuit": "rc-lowpass",
+      "path": "docs/gallery/rc-lowpass/rc-lowpass.png",
+      "sha256": "eaa229886b667622f7da366d9048817577586a933ac4b7db6203cc546c409777",
+      "status": "pass"
+    },
+    {
+      "circuit": "rl-lowpass",
+      "path": "docs/gallery/rl-lowpass/rl-lowpass.png",
+      "sha256": "b59ba32f1151702aafc825f7b69b7338b384fcd49ec63f2693c97b94196f1f90",
+      "status": "pass"
+    },
+    {
+      "circuit": "series-rlc",
+      "path": "docs/gallery/series-rlc/series-rlc.png",
+      "sha256": "1b8c72a73fd1d932e6d7c6f1fb5be8aa1247f1a72d75d4cab46b82a4616c98c8",
+      "status": "pass"
+    }
+  ]
+}

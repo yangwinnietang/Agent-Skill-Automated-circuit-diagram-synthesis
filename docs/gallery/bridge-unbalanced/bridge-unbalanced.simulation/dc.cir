@@ -1,0 +1,17 @@
+bridge-unbalanced: Unbalanced Wheatstone bridge
+* Ideal linear signal model; opamps have no supply or output limits.
+V1 vcc 0 DC 5 AC 0
+Rtl vcc left 1000
+Rbl left 0 2000
+Rtr vcc right 1500
+Rbr right 0 2000
+Rbridge left right 10000
+.op
+.control
+set filetype=ascii
+set numdgt=15
+run
+write result.raw all
+quit
+.endc
+.end

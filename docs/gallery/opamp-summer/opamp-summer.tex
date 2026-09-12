@@ -1,0 +1,50 @@
+\documentclass[border=12pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage[europeanresistors,americanvoltages,americancurrents,americaninductors]{circuitikz}
+\definecolor{circuitink}{HTML}{20334A}
+\begin{document}
+% Generated from validated JSON; edit the JSON to keep SPICE in sync.
+% V pins: [positive, negative]; I pins: [arrow from, arrow to].
+\begin{circuitikz}[color=circuitink,thick,font=\small]
+\node[op amp] (DU1) at (6,2.5) {$U_{\mathrm{1}}$};
+\coordinate (PUP) at (DU1.+);
+\coordinate (PUM) at (DU1.-);
+\coordinate (PUO) at (DU1.out);
+\coordinate (PAP) at (0,4);
+\coordinate (PAG) at (0,2.5);
+\coordinate (PBP) at (0,1);
+\coordinate (PBG) at (0,-0.5);
+\coordinate (PASUM) at (3.5,4);
+\coordinate (PBSUM) at (3.5,1);
+\coordinate (PSUM) at (3.5,3);
+\coordinate (PFBLEFT) at (3.5,5.5);
+\coordinate (PFBRIGHT) at (8,5.5);
+\coordinate (POUT) at (8,2.5);
+\coordinate (PPROBE) at (9.5,2.5);
+\coordinate (PPG) at (5,0);
+\draw (PAG) to[V,invert,l^={\shortstack{$V_{\mathrm{a}}$\\$200\,\mathrm{m}\mathrm{V}$}}] (PAP);
+\draw (PBG) to[V,invert,l^={\shortstack{$V_{\mathrm{b}}$\\$400\,\mathrm{m}\mathrm{V}$}}] (PBP);
+\draw (PAP) to[R,l^={\shortstack{$R_{\mathrm{a}}$\\$10\,\mathrm{k}\Omega$}}] (PASUM);
+\draw (PBP) to[R,l^={\shortstack{$R_{\mathrm{b}}$\\$20\,\mathrm{k}\Omega$}}] (PBSUM);
+\draw (PFBLEFT) to[R,l^={\shortstack{$R_{\mathrm{f}}$\\$10\,\mathrm{k}\Omega$}}] (PFBRIGHT);
+\draw (PBSUM) -- (PSUM);
+\draw (PSUM) -- (PASUM);
+\draw (PASUM) -- (PFBLEFT);
+\draw (PSUM) -| (PUM);
+\draw (PUO) -| (POUT);
+\draw (POUT) -- (PPROBE);
+\draw (POUT) -- (PFBRIGHT);
+\draw (PPG) -| (PUP);
+\draw (PAG) node[ground] {};
+\draw (PBG) node[ground] {};
+\draw (PPG) node[ground] {};
+\node[circ] at (PASUM) {};
+\node[circ] at (PSUM) {};
+\node[circ] at (POUT) {};
+\draw (PAP) node[ocirc] {} node[above right] {Va};
+\draw (PBP) node[ocirc] {} node[above right] {Vb};
+\draw (PPROBE) node[ocirc] {} node[above right] {Vout};
+\end{circuitikz}
+\end{document}

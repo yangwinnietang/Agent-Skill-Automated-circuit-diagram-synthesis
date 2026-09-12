@@ -1,0 +1,67 @@
+{
+  "case_id": "opamp-summer",
+  "title": "Inverting weighted summer",
+  "status": "pass",
+  "model": "ideal linear components; signal-only finite-gain opamps",
+  "tolerances": {
+    "absolute_v": 1e-09,
+    "relative": 1e-06
+  },
+  "runs": [
+    {
+      "analysis": "dc",
+      "frequency_hz": null,
+      "status": "pass",
+      "artifacts": {
+        "netlist": "dc.cir",
+        "raw": "dc.raw",
+        "log": "dc.log"
+      },
+      "measurements": {
+        "V_va": {
+          "actual": 0.2,
+          "expected": 0.2,
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 2.0099999999999999e-07,
+          "passed": true
+        },
+        "V_vb": {
+          "actual": 0.4,
+          "expected": 0.4,
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 4.01e-07,
+          "passed": true
+        },
+        "V_sum": {
+          "actual": 3.999990000025e-07,
+          "expected": 3.999990000025e-07,
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 1.0003999990000025e-09,
+          "passed": true
+        },
+        "V_out": {
+          "actual": -0.3999990000025,
+          "expected": -0.39999900000250005,
+          "absolute_error_v": 5.551115123125783e-17,
+          "allowed_error_v": 4.0099900000250005e-07,
+          "passed": true
+        },
+        "output": {
+          "actual": -0.3999990000025,
+          "expected": -0.39999900000250005,
+          "absolute_error_v": 5.551115123125783e-17,
+          "allowed_error_v": 4.0099900000250005e-07,
+          "passed": true
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "simulator": {
+    "executable": "/workspace/scratch/d265da16246a/tex-runtime/bin/ngspice",
+    "version": "42",
+    "version_output": "******\n** ngspice-42 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2023, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at http://ngspice.sourceforge.net/bugrep.html\n** Creation Date: Sun Mar 31 20:15:14 UTC 2024\n******",
+    "version_exit_code": 0
+  },
+  "spec_sha256": "703863bfcdda84cb70a4f8d4d3af1587b07b23af92d4436e7ca40456b4abafea"
+}

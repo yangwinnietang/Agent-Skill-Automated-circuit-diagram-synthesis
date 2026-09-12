@@ -1,0 +1,14 @@
+parallel-current: Parallel resistors with upward current source
+* Ideal linear signal model; opamps have no supply or output limits.
+I1 0 out DC 0.0030000000000000001 AC 0
+R1 out 0 1000
+R2 out 0 2000
+.op
+.control
+set filetype=ascii
+set numdgt=15
+run
+write result.raw all
+quit
+.endc
+.end

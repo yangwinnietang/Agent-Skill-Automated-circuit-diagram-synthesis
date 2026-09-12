@@ -1,0 +1,37 @@
+\documentclass[border=12pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage[europeanresistors,americanvoltages,americancurrents,americaninductors]{circuitikz}
+\definecolor{circuitink}{HTML}{20334A}
+\begin{document}
+% Generated from validated JSON; edit the JSON to keep SPICE in sync.
+% V pins: [positive, negative]; I pins: [arrow from, arrow to].
+\begin{circuitikz}[color=circuitink,thick,font=\small]
+\coordinate (PVP) at (0,5);
+\coordinate (PVG) at (0,0);
+\coordinate (PTL) at (3,5);
+\coordinate (PLEFT) at (3,2.5);
+\coordinate (PBL) at (3,0);
+\coordinate (PTR) at (7.5,5);
+\coordinate (PRIGHT) at (7.5,2.5);
+\coordinate (PBR) at (7.5,0);
+\draw (PVG) to[V,invert,l^={\shortstack{$V_{\mathrm{1}}$\\$5\,\mathrm{V}$}}] (PVP);
+\draw (PTL) to[R,l^={\shortstack{$R_{\mathrm{tl}}$\\$1\,\mathrm{k}\Omega$}}] (PLEFT);
+\draw (PLEFT) to[R,l^={\shortstack{$R_{\mathrm{bl}}$\\$2\,\mathrm{k}\Omega$}}] (PBL);
+\draw (PTR) to[R,l^={\shortstack{$R_{\mathrm{tr}}$\\$1.5\,\mathrm{k}\Omega$}}] (PRIGHT);
+\draw (PRIGHT) to[R,l^={\shortstack{$R_{\mathrm{br}}$\\$2\,\mathrm{k}\Omega$}}] (PBR);
+\draw (PLEFT) to[R,l^={\shortstack{$R_{\mathrm{bridge}}$\\$10\,\mathrm{k}\Omega$}}] (PRIGHT);
+\draw (PVP) -- (PTL);
+\draw (PTL) -- (PTR);
+\draw (PVG) -- (PBL);
+\draw (PBL) -- (PBR);
+\draw (PVG) node[ground] {};
+\node[circ] at (PTL) {};
+\node[circ] at (PLEFT) {};
+\node[circ] at (PBL) {};
+\node[circ] at (PRIGHT) {};
+\draw (PLEFT) node[above right] {VL};
+\draw (PRIGHT) node[above right] {VR};
+\end{circuitikz}
+\end{document}

@@ -1,0 +1,60 @@
+{
+  "case_id": "opamp-inverting",
+  "title": "Inverting amplifier",
+  "status": "pass",
+  "model": "ideal linear components; signal-only finite-gain opamps",
+  "tolerances": {
+    "absolute_v": 1e-09,
+    "relative": 1e-06
+  },
+  "runs": [
+    {
+      "analysis": "dc",
+      "frequency_hz": null,
+      "status": "pass",
+      "artifacts": {
+        "netlist": "dc.cir",
+        "raw": "dc.raw",
+        "log": "dc.log"
+      },
+      "measurements": {
+        "V_vin": {
+          "actual": 0.1,
+          "expected": 0.1,
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 1.0099999999999999e-07,
+          "passed": true
+        },
+        "V_sum": {
+          "actual": 9.99989000120999e-07,
+          "expected": 9.999890001209987e-07,
+          "absolute_error_v": 2.117582368135751e-22,
+          "allowed_error_v": 1.0009999890001212e-09,
+          "passed": true
+        },
+        "V_out": {
+          "actual": -0.9999890001209989,
+          "expected": -0.9999890001209987,
+          "absolute_error_v": 2.220446049250313e-16,
+          "allowed_error_v": 1.0009890001209988e-06,
+          "passed": true
+        },
+        "output": {
+          "actual": -0.9999890001209989,
+          "expected": -0.9999890001209987,
+          "absolute_error_v": 2.220446049250313e-16,
+          "allowed_error_v": 1.0009890001209988e-06,
+          "passed": true
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "simulator": {
+    "executable": "/workspace/scratch/d265da16246a/tex-runtime/bin/ngspice",
+    "version": "42",
+    "version_output": "******\n** ngspice-42 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2023, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at http://ngspice.sourceforge.net/bugrep.html\n** Creation Date: Sun Mar 31 20:15:14 UTC 2024\n******",
+    "version_exit_code": 0
+  },
+  "spec_sha256": "8ecd732ad8e6832643920098e6fb2d5298e7f8524b0b53e963a145ae0e7eb93a"
+}

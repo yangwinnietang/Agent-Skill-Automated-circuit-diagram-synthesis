@@ -1,0 +1,201 @@
+{
+  "id": "bridge-unbalanced",
+  "title": "Unbalanced Wheatstone bridge",
+  "category": "DC networks",
+  "nodes": {
+    "VP": {
+      "net": "vcc",
+      "at": [
+        0,
+        5
+      ]
+    },
+    "VG": {
+      "net": "0",
+      "at": [
+        0,
+        0
+      ]
+    },
+    "TL": {
+      "net": "vcc",
+      "at": [
+        3,
+        5
+      ]
+    },
+    "LEFT": {
+      "net": "left",
+      "at": [
+        3,
+        2.5
+      ]
+    },
+    "BL": {
+      "net": "0",
+      "at": [
+        3,
+        0
+      ]
+    },
+    "TR": {
+      "net": "vcc",
+      "at": [
+        7.5,
+        5
+      ]
+    },
+    "RIGHT": {
+      "net": "right",
+      "at": [
+        7.5,
+        2.5
+      ]
+    },
+    "BR": {
+      "net": "0",
+      "at": [
+        7.5,
+        0
+      ]
+    }
+  },
+  "components": [
+    {
+      "ref": "V1",
+      "kind": "V",
+      "value": 5,
+      "pins": [
+        "VP",
+        "VG"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rtl",
+      "kind": "R",
+      "value": 1000,
+      "pins": [
+        "TL",
+        "LEFT"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rbl",
+      "kind": "R",
+      "value": 2000,
+      "pins": [
+        "LEFT",
+        "BL"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rtr",
+      "kind": "R",
+      "value": 1500,
+      "pins": [
+        "TR",
+        "RIGHT"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rbr",
+      "kind": "R",
+      "value": 2000,
+      "pins": [
+        "RIGHT",
+        "BR"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rbridge",
+      "kind": "R",
+      "value": 10000,
+      "pins": [
+        "LEFT",
+        "RIGHT"
+      ],
+      "label_side": "above"
+    }
+  ],
+  "wires": [
+    [
+      "VP",
+      "TL"
+    ],
+    [
+      "TL",
+      "TR"
+    ],
+    [
+      "VG",
+      "BL"
+    ],
+    [
+      "BL",
+      "BR"
+    ]
+  ],
+  "grounds": [
+    "VG"
+  ],
+  "junctions": [
+    "TL",
+    "LEFT",
+    "BL",
+    "RIGHT"
+  ],
+  "ports": [
+    {
+      "point": "LEFT",
+      "label": "VL"
+    },
+    {
+      "point": "RIGHT",
+      "label": "VR"
+    }
+  ],
+  "analysis": {
+    "dc": true,
+    "ac_hz": [],
+    "measurements": [
+      {
+        "name": "V_vcc",
+        "positive": "vcc",
+        "negative": "0"
+      },
+      {
+        "name": "V_left",
+        "positive": "left",
+        "negative": "0"
+      },
+      {
+        "name": "V_right",
+        "positive": "right",
+        "negative": "0"
+      },
+      {
+        "name": "output",
+        "positive": "left",
+        "negative": "right"
+      }
+    ]
+  },
+  "expected": {
+    "dc": {
+      "V_vcc": 5,
+      "V_left": 3.3057851239669422,
+      "V_right": 2.8925619834710745,
+      "output": 0.4132231404958677
+    },
+    "ac": []
+  },
+  "notes": [
+    "Vout = VL - VR = +0.4132231405 V; the left midpoint is positive.",
+    "The 10 kOhm bridge loads both divider legs; its current is 41.32231405 uA left to right."
+  ]
+}

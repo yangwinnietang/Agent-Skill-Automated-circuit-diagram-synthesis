@@ -1,0 +1,911 @@
+{
+  "purpose": "Independent analytic electrical oracle, no circuit-generator imports or outputs used.",
+  "units": "SI units throughout; AC phase in degrees.",
+  "conventions": {
+    "ground": "Node 0; every circuit shares one electrical reference.",
+    "component_nodes": "R/C/L/V/I: ordered first and second terminals; E: out+, out-, control+, control-.",
+    "voltage": "V(a,b) = V(a) - V(b).",
+    "current": "Positive from first listed terminal to second listed terminal.",
+    "AC": "Filter sources use DC 1 AC 1 with AC phase 0 degrees. AC values are Vout/Vin.",
+    "opamp": "Signal-only ideal VCVS E1 with gain 1e6, infinite input impedance, zero output impedance; power rails intentionally omitted.",
+    "component_count": "Includes independent and dependent sources plus passives; excludes ground symbols, wires, node labels, and output probes."
+  },
+  "circuits": [
+    {
+      "id": "divider_unloaded",
+      "title": "Unloaded voltage divider",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 5,
+          "nodes": [
+            "vcc",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rtop",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "vcc",
+            "out"
+          ]
+        },
+        {
+          "ref": "Rbottom",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "out",
+            "0"
+          ]
+        }
+      ],
+      "component_count": 3,
+      "counts_by_type": {
+        "V": 1,
+        "R": 2
+      },
+      "measurement": "V(out,0)",
+      "dc": {
+        "node_voltages_V": {
+          "vcc": 5,
+          "out": 2.5,
+          "0": 0
+        },
+        "branch_currents_A": {
+          "Rtop": 0.00025,
+          "Rbottom": 0.00025,
+          "V1": -0.00025
+        }
+      }
+    },
+    {
+      "id": "divider_loaded",
+      "title": "Loaded voltage divider",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 5,
+          "nodes": [
+            "vcc",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rtop",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "vcc",
+            "out"
+          ]
+        },
+        {
+          "ref": "Rbottom",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "out",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rload",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "out",
+            "0"
+          ]
+        }
+      ],
+      "component_count": 4,
+      "counts_by_type": {
+        "V": 1,
+        "R": 3
+      },
+      "measurement": "V(out,0)",
+      "dc": {
+        "node_voltages_V": {
+          "vcc": 5,
+          "out": 1.6666666666666667,
+          "0": 0
+        },
+        "branch_currents_A": {
+          "Rtop": 0.0003333333333333333,
+          "Rbottom": 0.00016666666666666666,
+          "Rload": 0.00016666666666666666,
+          "V1": -0.0003333333333333333
+        }
+      }
+    },
+    {
+      "id": "parallel_current",
+      "title": "Parallel resistors with upward current source",
+      "components": [
+        {
+          "ref": "I1",
+          "type": "I",
+          "value": 0.003,
+          "nodes": [
+            "0",
+            "out"
+          ]
+        },
+        {
+          "ref": "R1",
+          "type": "R",
+          "value": 1000,
+          "nodes": [
+            "out",
+            "0"
+          ]
+        },
+        {
+          "ref": "R2",
+          "type": "R",
+          "value": 2000,
+          "nodes": [
+            "out",
+            "0"
+          ]
+        }
+      ],
+      "component_count": 3,
+      "counts_by_type": {
+        "I": 1,
+        "R": 2
+      },
+      "measurement": "V(out,0)",
+      "dc": {
+        "node_voltages_V": {
+          "out": 2,
+          "0": 0
+        },
+        "branch_currents_A": {
+          "I1": 0.003,
+          "R1": 0.002,
+          "R2": 0.001
+        }
+      }
+    },
+    {
+      "id": "bridge_balanced",
+      "title": "Balanced Wheatstone bridge",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 5,
+          "nodes": [
+            "vcc",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rtl",
+          "type": "R",
+          "value": 1000,
+          "nodes": [
+            "vcc",
+            "left"
+          ]
+        },
+        {
+          "ref": "Rbl",
+          "type": "R",
+          "value": 2000,
+          "nodes": [
+            "left",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rtr",
+          "type": "R",
+          "value": 1500,
+          "nodes": [
+            "vcc",
+            "right"
+          ]
+        },
+        {
+          "ref": "Rbr",
+          "type": "R",
+          "value": 3000,
+          "nodes": [
+            "right",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rbridge",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "left",
+            "right"
+          ]
+        }
+      ],
+      "component_count": 6,
+      "counts_by_type": {
+        "V": 1,
+        "R": 5
+      },
+      "measurement": "V(left,right)",
+      "dc": {
+        "node_voltages_V": {
+          "vcc": 5,
+          "left": 3.3333333333333335,
+          "right": 3.3333333333333335,
+          "0": 0
+        },
+        "output_V": 0.0,
+        "branch_currents_A": {
+          "Rtl": 0.0016666666666666666,
+          "Rbl": 0.0016666666666666668,
+          "Rtr": 0.0011111111111111111,
+          "Rbr": 0.0011111111111111111,
+          "Rbridge": 0.0,
+          "V1": -0.0027777777777777775
+        }
+      }
+    },
+    {
+      "id": "bridge_unbalanced",
+      "title": "Unbalanced Wheatstone bridge",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 5,
+          "nodes": [
+            "vcc",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rtl",
+          "type": "R",
+          "value": 1000,
+          "nodes": [
+            "vcc",
+            "left"
+          ]
+        },
+        {
+          "ref": "Rbl",
+          "type": "R",
+          "value": 2000,
+          "nodes": [
+            "left",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rtr",
+          "type": "R",
+          "value": 1500,
+          "nodes": [
+            "vcc",
+            "right"
+          ]
+        },
+        {
+          "ref": "Rbr",
+          "type": "R",
+          "value": 2000,
+          "nodes": [
+            "right",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rbridge",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "left",
+            "right"
+          ]
+        }
+      ],
+      "component_count": 6,
+      "counts_by_type": {
+        "V": 1,
+        "R": 5
+      },
+      "measurement": "V(left,right)",
+      "dc": {
+        "node_voltages_V": {
+          "vcc": 5,
+          "left": 3.3057851239669422,
+          "right": 2.8925619834710745,
+          "0": 0
+        },
+        "output_V": 0.4132231404958677,
+        "branch_currents_A": {
+          "Rtl": 0.0016942148760330578,
+          "Rbl": 0.001652892561983471,
+          "Rtr": 0.0014049586776859503,
+          "Rbr": 0.0014462809917355373,
+          "Rbridge": 4.132231404958677e-05,
+          "V1": -0.0030991735537190084
+        }
+      }
+    },
+    {
+      "id": "rc_lowpass",
+      "title": "RC low-pass filter",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 1,
+          "nodes": [
+            "vin",
+            "0"
+          ]
+        },
+        {
+          "ref": "R1",
+          "type": "R",
+          "value": 1000,
+          "nodes": [
+            "vin",
+            "out"
+          ]
+        },
+        {
+          "ref": "C1",
+          "type": "C",
+          "value": 1e-07,
+          "nodes": [
+            "out",
+            "0"
+          ]
+        }
+      ],
+      "component_count": 3,
+      "counts_by_type": {
+        "V": 1,
+        "R": 1,
+        "C": 1
+      },
+      "measurement": "V(out,0)",
+      "dc": {
+        "node_voltages_V": {
+          "vin": 1,
+          "out": 1,
+          "0": 0
+        },
+        "output_V": 1,
+        "branch_currents_A": {
+          "V1": 0,
+          "R1": 0,
+          "C1": 0
+        }
+      },
+      "transfer": "1 / (1 + j*w*R*C)",
+      "characteristic_frequency_Hz": 1591.5494309189537,
+      "ac": [
+        {
+          "frequency_Hz": 100,
+          "real": 0.9960676824071726,
+          "imag": -0.0625847782705717,
+          "magnitude": 0.998031904503645,
+          "magnitude_dB": -0.017111504344580936,
+          "phase_deg": -3.5952737798681755
+        },
+        {
+          "frequency_Hz": 1591.5494309189537,
+          "real": 0.4999999999999999,
+          "imag": -0.5,
+          "magnitude": 0.7071067811865475,
+          "magnitude_dB": -3.0102999566398125,
+          "phase_deg": -45.00000000000001
+        },
+        {
+          "frequency_Hz": 10000,
+          "real": 0.024704523031857644,
+          "imag": -0.15522309613464763,
+          "magnitude": 0.15717672547758985,
+          "magnitude_dB": -16.072235265805517,
+          "phase_deg": -80.95693892096232
+        }
+      ]
+    },
+    {
+      "id": "rc_highpass",
+      "title": "RC high-pass filter",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 1,
+          "nodes": [
+            "vin",
+            "0"
+          ]
+        },
+        {
+          "ref": "C1",
+          "type": "C",
+          "value": 1e-07,
+          "nodes": [
+            "vin",
+            "out"
+          ]
+        },
+        {
+          "ref": "R1",
+          "type": "R",
+          "value": 1000,
+          "nodes": [
+            "out",
+            "0"
+          ]
+        }
+      ],
+      "component_count": 3,
+      "counts_by_type": {
+        "V": 1,
+        "C": 1,
+        "R": 1
+      },
+      "measurement": "V(out,0)",
+      "dc": {
+        "node_voltages_V": {
+          "vin": 1,
+          "out": 0,
+          "0": 0
+        },
+        "output_V": 0,
+        "branch_currents_A": {
+          "V1": 0,
+          "R1": 0,
+          "C1": 0
+        }
+      },
+      "transfer": "j*w*R*C / (1 + j*w*R*C)",
+      "characteristic_frequency_Hz": 1591.5494309189537,
+      "ac": [
+        {
+          "frequency_Hz": 100,
+          "real": 0.0039323175928274836,
+          "imag": 0.0625847782705717,
+          "magnitude": 0.06270819398473762,
+          "magnitude_dB": -24.053514137182283,
+          "phase_deg": 86.40472622013183
+        },
+        {
+          "frequency_Hz": 1591.5494309189537,
+          "real": 0.5000000000000001,
+          "imag": 0.5,
+          "magnitude": 0.7071067811865476,
+          "magnitude_dB": -3.0102999566398116,
+          "phase_deg": 44.99999999999999
+        },
+        {
+          "frequency_Hz": 10000,
+          "real": 0.9752954769681423,
+          "imag": 0.15522309613464763,
+          "magnitude": 0.9875704921513918,
+          "magnitude_dB": -0.10863789864321807,
+          "phase_deg": 9.04306107903769
+        }
+      ]
+    },
+    {
+      "id": "rl_lowpass",
+      "title": "RL low-pass, output across series resistor",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 1,
+          "nodes": [
+            "vin",
+            "0"
+          ]
+        },
+        {
+          "ref": "L1",
+          "type": "L",
+          "value": 0.01,
+          "nodes": [
+            "vin",
+            "out"
+          ]
+        },
+        {
+          "ref": "R1",
+          "type": "R",
+          "value": 100,
+          "nodes": [
+            "out",
+            "0"
+          ]
+        }
+      ],
+      "component_count": 3,
+      "counts_by_type": {
+        "V": 1,
+        "L": 1,
+        "R": 1
+      },
+      "measurement": "V(out,0)",
+      "dc": {
+        "node_voltages_V": {
+          "vin": 1,
+          "out": 1,
+          "0": 0
+        },
+        "output_V": 1,
+        "branch_currents_A": {
+          "V1": -0.01,
+          "R1": 0.01,
+          "L1": 0.01
+        }
+      },
+      "transfer": "R / (R + j*w*L)",
+      "characteristic_frequency_Hz": 1591.5494309189532,
+      "ac": [
+        {
+          "frequency_Hz": 100,
+          "real": 0.9960676824071726,
+          "imag": -0.0625847782705717,
+          "magnitude": 0.998031904503645,
+          "magnitude_dB": -0.017111504344580936,
+          "phase_deg": -3.5952737798681755
+        },
+        {
+          "frequency_Hz": 1591.5494309189537,
+          "real": 0.49999999999999994,
+          "imag": -0.5,
+          "magnitude": 0.7071067811865475,
+          "magnitude_dB": -3.0102999566398125,
+          "phase_deg": -45.00000000000001
+        },
+        {
+          "frequency_Hz": 10000,
+          "real": 0.024704523031857644,
+          "imag": -0.15522309613464763,
+          "magnitude": 0.15717672547758985,
+          "magnitude_dB": -16.072235265805517,
+          "phase_deg": -80.95693892096232
+        }
+      ]
+    },
+    {
+      "id": "series_rlc",
+      "title": "Series RLC, output across resistor",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 1,
+          "nodes": [
+            "vin",
+            "0"
+          ]
+        },
+        {
+          "ref": "R1",
+          "type": "R",
+          "value": 100,
+          "nodes": [
+            "vin",
+            "rl"
+          ]
+        },
+        {
+          "ref": "L1",
+          "type": "L",
+          "value": 0.01,
+          "nodes": [
+            "rl",
+            "lc"
+          ]
+        },
+        {
+          "ref": "C1",
+          "type": "C",
+          "value": 1e-06,
+          "nodes": [
+            "lc",
+            "0"
+          ]
+        }
+      ],
+      "component_count": 4,
+      "counts_by_type": {
+        "V": 1,
+        "R": 1,
+        "L": 1,
+        "C": 1
+      },
+      "measurement": "V(vin,rl)",
+      "dc": {
+        "node_voltages_V": {
+          "vin": 1,
+          "rl": 1,
+          "lc": 1,
+          "0": 0
+        },
+        "output_V": 0,
+        "branch_currents_A": {
+          "V1": 0,
+          "R1": 0,
+          "L1": 0,
+          "C1": 0
+        }
+      },
+      "transfer": "R / (R + j*(w*L - 1/(w*C)))",
+      "characteristic_frequency_Hz": 1591.5494309189535,
+      "Q": 1,
+      "ac": [
+        {
+          "frequency_Hz": 100,
+          "real": 0.003963426971135848,
+          "imag": 0.06283086994288971,
+          "magnitude": 0.06295575407487268,
+          "magnitude_dB": -24.019291395709764,
+          "phase_deg": 86.39051399008575
+        },
+        {
+          "frequency_Hz": 1591.5494309189537,
+          "real": 1.0,
+          "imag": -2.842170943040401e-16,
+          "magnitude": 1.0,
+          "magnitude_dB": 0.0,
+          "phase_deg": -1.6284439969093206e-14
+        },
+        {
+          "frequency_Hz": 10000,
+          "real": 0.025971497699137987,
+          "imag": -0.15905024051035466,
+          "magnitude": 0.16115674884762968,
+          "magnitude_dB": -15.855030051756154,
+          "phase_deg": -80.72595557158056
+        }
+      ]
+    },
+    {
+      "id": "opamp_inverting",
+      "title": "Inverting amplifier",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 0.1,
+          "nodes": [
+            "vin",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rin",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "vin",
+            "sum"
+          ]
+        },
+        {
+          "ref": "Rf",
+          "type": "R",
+          "value": 100000,
+          "nodes": [
+            "sum",
+            "out"
+          ]
+        },
+        {
+          "ref": "E1",
+          "type": "E",
+          "value": 1000000.0,
+          "nodes": [
+            "out",
+            "0",
+            "0",
+            "sum"
+          ]
+        }
+      ],
+      "component_count": 4,
+      "counts_by_type": {
+        "V": 1,
+        "R": 2,
+        "E": 1
+      },
+      "measurement": "V(out,0)",
+      "dc": {
+        "ideal_output_V": -1,
+        "finite_gain_output_V": -0.9999890001209987,
+        "node_voltages_V": {
+          "vin": 0.1,
+          "sum": 9.999890001209987e-07,
+          "out": -0.9999890001209987,
+          "0": 0
+        },
+        "branch_currents_A": {
+          "Rin": 9.999900001099988e-06,
+          "Rf": 9.999900001099988e-06,
+          "V1": -9.999900001099988e-06,
+          "E1": 9.999900001099988e-06
+        }
+      },
+      "ideal_closed_loop_gain": -10,
+      "finite_gain_formula": "-10*Vin / (1+11/A)"
+    },
+    {
+      "id": "opamp_noninverting",
+      "title": "Noninverting amplifier",
+      "components": [
+        {
+          "ref": "V1",
+          "type": "V",
+          "value": 0.1,
+          "nodes": [
+            "vin",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rg",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "sum",
+            "0"
+          ]
+        },
+        {
+          "ref": "Rf",
+          "type": "R",
+          "value": 100000,
+          "nodes": [
+            "sum",
+            "out"
+          ]
+        },
+        {
+          "ref": "E1",
+          "type": "E",
+          "value": 1000000.0,
+          "nodes": [
+            "out",
+            "0",
+            "vin",
+            "sum"
+          ]
+        }
+      ],
+      "component_count": 4,
+      "counts_by_type": {
+        "V": 1,
+        "R": 2,
+        "E": 1
+      },
+      "measurement": "V(out,0)",
+      "dc": {
+        "ideal_output_V": 1.1,
+        "finite_gain_output_V": 1.0999879001330986,
+        "node_voltages_V": {
+          "vin": 0.1,
+          "sum": 0.09999890001209988,
+          "out": 1.0999879001330986,
+          "0": 0
+        },
+        "branch_currents_A": {
+          "Rg": 9.999890001209988e-06,
+          "Rf": -9.999890001209986e-06,
+          "V1": 0,
+          "E1": -9.999890001209986e-06
+        }
+      },
+      "ideal_closed_loop_gain": 11,
+      "finite_gain_formula": "11*Vin / (1+11/A)"
+    },
+    {
+      "id": "opamp_summer",
+      "title": "Inverting weighted summer",
+      "components": [
+        {
+          "ref": "Va",
+          "type": "V",
+          "value": 0.2,
+          "nodes": [
+            "va",
+            "0"
+          ]
+        },
+        {
+          "ref": "Vb",
+          "type": "V",
+          "value": 0.4,
+          "nodes": [
+            "vb",
+            "0"
+          ]
+        },
+        {
+          "ref": "Ra",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "va",
+            "sum"
+          ]
+        },
+        {
+          "ref": "Rb",
+          "type": "R",
+          "value": 20000,
+          "nodes": [
+            "vb",
+            "sum"
+          ]
+        },
+        {
+          "ref": "Rf",
+          "type": "R",
+          "value": 10000,
+          "nodes": [
+            "sum",
+            "out"
+          ]
+        },
+        {
+          "ref": "E1",
+          "type": "E",
+          "value": 1000000.0,
+          "nodes": [
+            "out",
+            "0",
+            "0",
+            "sum"
+          ]
+        }
+      ],
+      "component_count": 6,
+      "counts_by_type": {
+        "V": 2,
+        "R": 3,
+        "E": 1
+      },
+      "measurement": "V(out,0)",
+      "dc": {
+        "ideal_output_V": -0.4,
+        "finite_gain_output_V": -0.39999900000250005,
+        "node_voltages_V": {
+          "va": 0.2,
+          "vb": 0.4,
+          "sum": 3.999990000025e-07,
+          "out": -0.39999900000250005,
+          "0": 0
+        },
+        "branch_currents_A": {
+          "Ra": 1.99999600001e-05,
+          "Rb": 1.9999980000050002e-05,
+          "Rf": 3.9999940000150005e-05,
+          "Va": -1.99999600001e-05,
+          "Vb": -1.9999980000050002e-05,
+          "E1": 3.9999940000150005e-05
+        }
+      },
+      "ideal_input_gains": {
+        "va": -1,
+        "vb": -0.5
+      },
+      "finite_gain_formula": "-(Va + 0.5*Vb) / (1+2.5/A)"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+opamp-summer: Inverting weighted summer
+* Ideal linear signal model; opamps have no supply or output limits.
+EU1 out 0 0 sum 1000000
+Va va 0 DC 0.20000000000000001 AC 0
+Vb vb 0 DC 0.40000000000000002 AC 0
+Ra va sum 10000
+Rb vb sum 20000
+Rf sum out 10000
+.op
+.control
+set filetype=ascii
+set numdgt=15
+run
+write result.raw all
+quit
+.endc
+.end

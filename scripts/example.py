@@ -5,9 +5,9 @@ from pathlib import Path
 import sys
 
 try:
-    from .compile_circuit import compile_circuit
+    from .compile_circuit import _print_message, compile_circuit
 except ImportError:
-    from compile_circuit import compile_circuit
+    from compile_circuit import _print_message, compile_circuit
 
 
 def main(argv=None):
@@ -21,7 +21,7 @@ def main(argv=None):
     parser.add_argument("--format", choices=("pdf", "svg", "png"), action="append")
     args = parser.parse_args(argv)
     if args.list:
-        print("\n".join(names))
+        _print_message("\n".join(names))
         return 0
     if args.output_dir is None:
         parser.error("Provide --output-dir (or use --list).")
@@ -34,9 +34,9 @@ def main(argv=None):
         with target.open("x", encoding="utf-8") as output:
             output.write((examples / target.name).read_text(encoding="utf-8"))
     except OSError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
+        _print_message(f"Error: {exc}", file=sys.stderr)
         return 1
-    print(f"TeX: {target}")
+    _print_message(f"TeX: {target}")
     if args.compile:
         return 0 if compile_circuit(target, formats=args.format or ("pdf",)) else 1
     return 0

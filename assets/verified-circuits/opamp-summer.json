@@ -1,0 +1,273 @@
+{
+  "id": "opamp-summer",
+  "title": "Inverting weighted summer",
+  "category": "Ideal opamp circuits",
+  "nodes": {
+    "UP": {
+      "net": "0",
+      "anchor": "U1.plus"
+    },
+    "UM": {
+      "net": "sum",
+      "anchor": "U1.minus"
+    },
+    "UO": {
+      "net": "out",
+      "anchor": "U1.out"
+    },
+    "AP": {
+      "net": "va",
+      "at": [
+        0,
+        4
+      ]
+    },
+    "AG": {
+      "net": "0",
+      "at": [
+        0,
+        2.5
+      ]
+    },
+    "BP": {
+      "net": "vb",
+      "at": [
+        0,
+        1
+      ]
+    },
+    "BG": {
+      "net": "0",
+      "at": [
+        0,
+        -0.5
+      ]
+    },
+    "ASUM": {
+      "net": "sum",
+      "at": [
+        3.5,
+        4
+      ]
+    },
+    "BSUM": {
+      "net": "sum",
+      "at": [
+        3.5,
+        1
+      ]
+    },
+    "SUM": {
+      "net": "sum",
+      "at": [
+        3.5,
+        3
+      ]
+    },
+    "FBLEFT": {
+      "net": "sum",
+      "at": [
+        3.5,
+        5.5
+      ]
+    },
+    "FBRIGHT": {
+      "net": "out",
+      "at": [
+        8,
+        5.5
+      ]
+    },
+    "OUT": {
+      "net": "out",
+      "at": [
+        8,
+        2.5
+      ]
+    },
+    "PROBE": {
+      "net": "out",
+      "at": [
+        9.5,
+        2.5
+      ]
+    },
+    "PG": {
+      "net": "0",
+      "at": [
+        5,
+        0
+      ]
+    }
+  },
+  "components": [
+    {
+      "ref": "U1",
+      "kind": "opamp",
+      "gain": 1000000.0,
+      "pins": [
+        "UP",
+        "UM",
+        "UO"
+      ],
+      "at": [
+        6,
+        2.5
+      ]
+    },
+    {
+      "ref": "Va",
+      "kind": "V",
+      "value": 0.2,
+      "pins": [
+        "AP",
+        "AG"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Vb",
+      "kind": "V",
+      "value": 0.4,
+      "pins": [
+        "BP",
+        "BG"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Ra",
+      "kind": "R",
+      "value": 10000,
+      "pins": [
+        "AP",
+        "ASUM"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rb",
+      "kind": "R",
+      "value": 20000,
+      "pins": [
+        "BP",
+        "BSUM"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "Rf",
+      "kind": "R",
+      "value": 10000,
+      "pins": [
+        "FBLEFT",
+        "FBRIGHT"
+      ],
+      "label_side": "above"
+    }
+  ],
+  "wires": [
+    [
+      "BSUM",
+      "SUM"
+    ],
+    [
+      "SUM",
+      "ASUM"
+    ],
+    [
+      "ASUM",
+      "FBLEFT"
+    ],
+    [
+      "SUM",
+      "UM"
+    ],
+    [
+      "UO",
+      "OUT"
+    ],
+    [
+      "OUT",
+      "PROBE"
+    ],
+    [
+      "OUT",
+      "FBRIGHT"
+    ],
+    [
+      "PG",
+      "UP"
+    ]
+  ],
+  "grounds": [
+    "AG",
+    "BG",
+    "PG"
+  ],
+  "junctions": [
+    "ASUM",
+    "SUM",
+    "OUT"
+  ],
+  "ports": [
+    {
+      "point": "AP",
+      "label": "Va"
+    },
+    {
+      "point": "BP",
+      "label": "Vb"
+    },
+    {
+      "point": "PROBE",
+      "label": "Vout"
+    }
+  ],
+  "analysis": {
+    "dc": true,
+    "ac_hz": [],
+    "measurements": [
+      {
+        "name": "V_va",
+        "positive": "va",
+        "negative": "0"
+      },
+      {
+        "name": "V_vb",
+        "positive": "vb",
+        "negative": "0"
+      },
+      {
+        "name": "V_sum",
+        "positive": "sum",
+        "negative": "0"
+      },
+      {
+        "name": "V_out",
+        "positive": "out",
+        "negative": "0"
+      },
+      {
+        "name": "output",
+        "positive": "out",
+        "negative": "0"
+      }
+    ]
+  },
+  "expected": {
+    "dc": {
+      "V_va": 0.2,
+      "V_vb": 0.4,
+      "V_sum": 3.999990000025e-07,
+      "V_out": -0.39999900000250005,
+      "output": -0.39999900000250005
+    },
+    "ac": []
+  },
+  "notes": [
+    "Signal-only ideal opamp: supply pins are intentionally omitted. SPICE uses Vout = 1e6 times (Vplus - Vminus).",
+    "Vout = -(Va + 0.5 Vb) = -0.4 V for infinite gain; the finite-gain check expects -0.399999000003 V.",
+    "Ra and Rb meet only at the negative summing node. No saturation, bandwidth, or output-current limits are modeled."
+  ]
+}

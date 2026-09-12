@@ -37,16 +37,24 @@ class BuildTests(unittest.TestCase):
         self.calls.append((command, cwd))
         tool = Path(command[0]).name
         if tool in ('pdflatex', 'xelatex', 'lualatex'):
+            work = Path(next(x.split('=', 1)[1] for x in command if x.startswith('-output-directory=')))
             if self.mode == 'compile-fail':
                 log.write(b'Unknown control sequence at line 8\n')
                 raise cc.BuildError('compiler failed')
-            work = Path(next(x.split('=', 1)[1] for x in command if x.startswith('-output-directory=')))
+            if self.mode == 'compile-fail-native':
+                (work / 'circuit.log').write_bytes(b'Native transcript: detailed error at line 19\n')
+                raise cc.BuildError('compiler failed')
             if self.mode != 'no-pdf':
                 (work / 'circuit.pdf').write_bytes(b'garbage' if self.mode == 'bad-pdf' else b'%PDF-1.5\ncontent')
             if self.mode == 'missing-glyph':
                 log.write(b'Missing character: There is no U+4E2D in font\n')
+            if self.mode == 'first-pass-missing-glyph':
+                (work / 'circuit.log').write_bytes(
+                    b'Missing character: There is no U+4E2D in font\n'
+                    if len(self.calls) == 1 else b'Second pass transcript\n')
             if self.mode == 'warning':
                 log.write(b'LaTeX Warning: unresolved reference\n')
+                (work / 'circuit.log').write_bytes(b'LaTeX Warning: unresolved reference\n')
         elif tool == 'pdfinfo':
             if self.mode == 'no-page-count':
                 log.write(b'Unexpected tool output\n')
@@ -148,6 +156,13 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(old.read_bytes(), b'old PDF')
         self.assertIn('line 8', (self.output / 'diagram.compile.log').read_text(encoding="utf-8"))
 
+    def test_compile_failure_preserves_native_transcript(self):
+        self.mode = 'compile-fail-native'
+        with self.assertRaisesRegex(cc.BuildError, 'compiler failed'):
+            self.build()
+        self.assertIn('detailed error at line 19',
+                      (self.output / 'diagram.compile.log').read_text(encoding='utf-8'))
+
     def test_converter_failure_publishes_nothing(self):
         self.output.mkdir()
         for ext in ['pdf', 'svg', 'png']:
@@ -184,6 +199,15 @@ class BuildTests(unittest.TestCase):
         with self.assertRaisesRegex(cc.BuildError, 'Missing glyphs'):
             self.build()
 
+    def test_missing_glyph_in_earlier_native_transcript_is_failure(self):
+        self.mode = 'first-pass-missing-glyph'
+        with self.assertRaisesRegex(cc.BuildError, 'Missing glyphs'):
+            self.build()
+        transcript = (self.output / 'diagram.compile.log').read_text(encoding='utf-8')
+        self.assertIn('Missing character:', transcript)
+        self.assertIn('Second pass transcript', transcript)
+        self.assertFalse((self.output / 'diagram.pdf').exists())
+
     def test_warnings_returned_once(self):
         self.mode = 'warning'
         self.assertEqual(self.build().warnings, ['LaTeX Warning: unresolved reference'])
@@ -210,6 +234,14 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(Path(command[-1]).name, 'circuit.tex')
         self.assertFalse(Path(command[-1]).parent.exists())
 
+    def test_relative_tool_paths_are_resolved_before_source_cwd(self):
+        with patch.object(cc.shutil, 'which', side_effect=lambda name: str(Path('tools') / name)):
+            self.build(formats=('svg', 'png'))
+        for command, cwd in self.calls:
+            self.assertTrue(Path(command[0]).is_absolute())
+            self.assertEqual(Path(command[0]).parent, Path.cwd() / 'tools')
+            self.assertEqual(cwd, self.source.parent)
+
     def test_output_directory_is_file(self):
         self.output.write_text('keep me')
         with self.assertRaisesRegex(cc.BuildError, 'File operation failed'):
@@ -221,6 +253,21 @@ class BuildTests(unittest.TestCase):
             self.assertTrue(cc.compile_circuit(self.source))
             self.mode = 'compile-fail'
             self.assertFalse(cc.compile_circuit(self.source))
+
+    def test_unicode_result_paths_and_ascii_console(self):
+        self.source = self.source.rename(self.root / '\u7535\u8def.tex')
+        result = self.build()
+        self.assertEqual(result.artifacts['pdf'].name, '\u7535\u8def.pdf')
+        output_bytes = io.BytesIO()
+        error_bytes = io.BytesIO()
+        with io.TextIOWrapper(output_bytes, encoding='ascii', write_through=True) as stdout, \
+                io.TextIOWrapper(error_bytes, encoding='ascii', write_through=True) as stderr, \
+                contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            self.assertTrue(cc.compile_circuit(self.source, output_dir=self.output))
+            self.mode = 'compile-fail'
+            self.assertFalse(cc.compile_circuit(self.source, output_dir=self.output))
+            self.assertIn(b'\\u7535\\u8def.pdf', output_bytes.getvalue())
+            self.assertIn(b'\\u7535\\u8def.compile.log', error_bytes.getvalue())
 
     def test_cli_returns_failure(self):
         self.mode = 'compile-fail'
@@ -253,6 +300,49 @@ class BuildTests(unittest.TestCase):
 
 
 class ProcessTests(unittest.TestCase):
+    @unittest.skipUnless(os.name == 'posix', 'Uses a POSIX executable script')
+    def test_cli_success_with_unicode_path_and_ascii_console(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            compiler = root / 'pdflatex'
+            compiler.write_text(
+                '#!' + sys.executable + '\n'
+                'from pathlib import Path\n'
+                'import sys\n'
+                'work = Path(next(a.split("=", 1)[1] for a in sys.argv '
+                'if a.startswith("-output-directory=")))\n'
+                '(work / "circuit.pdf").write_bytes(b"%PDF-1.5\\ncontent")\n',
+                encoding='utf-8')
+            compiler.chmod(0o755)
+            source = root / '\u7535\u8def.tex'
+            source.write_text('test source', encoding='utf-8')
+            result = subprocess.run(
+                [sys.executable, str(ROOT / 'scripts/compile_circuit.py'), str(source)],
+                capture_output=True, env={**os.environ, 'PYTHONIOENCODING': 'ascii:strict',
+                                         'PATH': str(root) + os.pathsep + os.environ.get('PATH', '')})
+            self.assertEqual(result.returncode, 0, result.stderr.decode('ascii'))
+            self.assertIn(b'\\u7535\\u8def.pdf', result.stdout)
+            self.assertTrue(source.with_suffix('.pdf').is_file())
+
+    def test_cli_help_on_ascii_console(self):
+        result = subprocess.run([sys.executable, str(ROOT / 'scripts/compile_circuit.py'), '--help'],
+                                capture_output=True, env={**os.environ, 'PYTHONIOENCODING': 'ascii:strict'})
+        self.assertEqual(result.returncode, 0, result.stderr.decode('ascii'))
+        self.assertIn(b'--passes', result.stdout)
+
+    @unittest.skipUnless(os.name == 'posix', 'Uses a POSIX executable symlink')
+    def test_tool_from_relative_path_runs_from_another_directory(self):
+        with tempfile.TemporaryDirectory() as temp, tempfile.TemporaryFile() as log:
+            root = Path(temp)
+            (root / 'relative-python').symlink_to(sys.executable)
+            elsewhere = root / 'elsewhere'
+            elsewhere.mkdir()
+            with patch.dict(os.environ, {'PATH': os.path.relpath(root)}):
+                executable = cc._tool('relative-python')
+                cc._run([executable, '-c', 'print("relative PATH works")'], elsewhere, log, 5)
+            log.seek(0)
+            self.assertIn(b'relative PATH works', log.read())
+
     def test_timeout_really_terminates_process(self):
         with tempfile.TemporaryDirectory() as temp, tempfile.TemporaryFile() as log:
             start = time.monotonic()
@@ -285,6 +375,16 @@ class ProcessTests(unittest.TestCase):
 
 
 class ExampleTests(unittest.TestCase):
+    def test_unicode_output_directory_with_ascii_console(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / '\u7535\u8def'
+            result = subprocess.run(
+                [sys.executable, str(ROOT / 'scripts/example.py'), '--output-dir', str(output)],
+                capture_output=True, env={**os.environ, 'PYTHONIOENCODING': 'ascii:strict'})
+            self.assertEqual(result.returncode, 0, result.stderr.decode('ascii'))
+            self.assertIn(b'\\u7535\\u8def', result.stdout)
+            self.assertTrue((output / 'divider.tex').is_file())
+
     def test_list(self):
         output = io.StringIO()
         with contextlib.redirect_stdout(output):

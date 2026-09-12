@@ -1,0 +1,13 @@
+Title: parallel-current: parallel resistors with upward current source
+Date: Sat Sep 12 09:16:32  2026
+Plotname: Operating Point
+Flags: real
+No. Variables: 2
+No. Points: 1
+Variables:
+	0	v(out)	voltage
+	1	v(all)	voltage
+Values:
+ 0	2.000000000000000e+00
+	2.000000000000000e+00
+

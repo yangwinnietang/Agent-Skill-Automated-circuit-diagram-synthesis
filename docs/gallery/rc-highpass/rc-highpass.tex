@@ -1,0 +1,28 @@
+\documentclass[border=12pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage[europeanresistors,americanvoltages,americancurrents,americaninductors]{circuitikz}
+\definecolor{circuitink}{HTML}{20334A}
+\begin{document}
+% Generated from validated JSON; edit the JSON to keep SPICE in sync.
+% V pins: [positive, negative]; I pins: [arrow from, arrow to].
+\begin{circuitikz}[color=circuitink,thick,font=\small]
+\coordinate (PVP) at (0,3);
+\coordinate (PVG) at (0,0);
+\coordinate (PIN) at (1.5,3);
+\coordinate (POUT) at (5,3);
+\coordinate (PSHUNTG) at (5,0);
+\coordinate (PPROBE) at (7,3);
+\draw (PVG) to[V,invert,l^={\shortstack{$V_{\mathrm{1}}$\\$1\,\mathrm{V}$\ DC\\$1\,\mathrm{V}$\ AC}}] (PVP);
+\draw (PIN) to[C,l^={\shortstack{$C_{\mathrm{1}}$\\$100\,\mathrm{n}\mathrm{F}$}}] (POUT);
+\draw (POUT) to[R,l^={\shortstack{$R_{\mathrm{1}}$\\$1\,\mathrm{k}\Omega$}}] (PSHUNTG);
+\draw (PVP) -- (PIN);
+\draw (POUT) -- (PPROBE);
+\draw (PVG) -- (PSHUNTG);
+\draw (PVG) node[ground] {};
+\node[circ] at (POUT) {};
+\draw (PIN) node[ocirc] {} node[above right] {Vin};
+\draw (PPROBE) node[ocirc] {} node[above right] {Vout};
+\end{circuitikz}
+\end{document}

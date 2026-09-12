@@ -1,0 +1,17 @@
+Title: bridge-balanced: balanced wheatstone bridge
+Date: Sat Sep 12 09:16:07  2026
+Plotname: Operating Point
+Flags: real
+No. Variables: 4
+No. Points: 1
+Variables:
+	0	v(vcc)	voltage
+	1	v(left)	voltage
+	2	v(right)	voltage
+	3	i(v1)	current
+Values:
+ 0	5.000000000000000e+00
+	3.333333333333333e+00
+	3.333333333333334e+00
+	-2.777777777777777e-03
+

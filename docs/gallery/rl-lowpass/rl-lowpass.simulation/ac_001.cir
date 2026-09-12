@@ -1,0 +1,14 @@
+rl-lowpass: RL low-pass, output across series resistor
+* Ideal linear signal model; opamps have no supply or output limits.
+V1 vin 0 DC 1 AC 1
+L1 vin out 0.01
+R1 out 0 100
+.ac lin 1 1591.5494309189537 1591.5494309189537
+.control
+set filetype=ascii
+set numdgt=15
+run
+write result.raw all
+quit
+.endc
+.end

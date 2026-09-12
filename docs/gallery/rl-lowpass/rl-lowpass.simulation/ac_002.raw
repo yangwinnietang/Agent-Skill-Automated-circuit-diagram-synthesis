@@ -1,0 +1,19 @@
+Title: rl-lowpass: rl low-pass, output across series resistor
+Date: Sat Sep 12 09:16:43  2026
+Plotname: AC Analysis
+Flags: complex
+No. Variables: 5
+No. Points: 1
+Variables:
+	0	frequency	frequency
+	1	i(l1)	current
+	2	v(out)	voltage
+	3	i(v1)	current
+	4	v(vin)	voltage
+Values:
+ 0	1.000000000000000e+04,0.000000000000000e+00
+	2.470452303185764e-04,-1.552230961346476e-03
+	2.470452303185764e-02,-1.552230961346476e-01
+	-2.470452303185764e-04,1.552230961346476e-03
+	1.000000000000000e+00,0.000000000000000e+00
+
