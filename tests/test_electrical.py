@@ -260,7 +260,10 @@ class SimulationTests(unittest.TestCase):
         self.actual_frequency = 1000
         self.spec = divider()
         self.commands = []
-        self.which = patch.object(ec.shutil, "which", return_value="/tools/ngspice")
+        # Use the same canonical native spelling returned after tool discovery;
+        # Windows resolves a POSIX-rooted /tools path onto the current drive.
+        self.executable = str(Path(self.temp.name).resolve() / "tools" / "ngspice")
+        self.which = patch.object(ec.shutil, "which", return_value=self.executable)
         self.which_mock = self.which.start()
         self.addCleanup(self.which.stop)
         self.runner = patch.object(ec.subprocess, "run", side_effect=self.fake_run)
@@ -271,7 +274,7 @@ class SimulationTests(unittest.TestCase):
         self.commands.append(command)
         if command[-1] == "--version":
             return subprocess.CompletedProcess(command, 0, "ngspice-45 : Circuit level simulation program", "")
-        self.assertEqual(command[:2], ["/tools/ngspice", "-b"])
+        self.assertEqual(command[:2], [self.executable, "-b"])
         netlist = Path(command[-1]).read_text()
         ac = ".ac lin" in netlist
         if self.mode == "timeout":

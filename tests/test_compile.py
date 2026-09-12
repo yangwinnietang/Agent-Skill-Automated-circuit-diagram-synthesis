@@ -20,7 +20,8 @@ class BuildTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
-        self.root = Path(self.temp.name)
+        # Windows TEMP can use an 8.3 alias; compare canonical filesystem paths.
+        self.root = Path(self.temp.name).resolve()
         self.source = self.root / 'diagram.tex'
         self.source.write_text('source remains editable')
         self.output = self.root / 'output'

@@ -108,6 +108,9 @@ The local three-engine main regression completed 120 methods with no skips; the 
 The GitHub workflow runs the fast suite on Linux and Windows with Python 3.9 and
 3.12, then installs real dependencies on Ubuntu 24.04 and runs all flags, all three
 engines and Chinese checks. See [current workflow runs](https://github.com/yangwinnietang/Agent-Skill-Automated-circuit-diagram-synthesis/actions/workflows/test.yml).
+The first expanded Windows CI run exposed short-path aliases in temporary fixtures
+and POSIX-only spellings in mocked executable paths. Those fixtures now use resolved
+native paths, with all failure injections and assertions retained.
 Cross-platform rendering outside that Linux job is not claimed.
 
 ## Independent skill use

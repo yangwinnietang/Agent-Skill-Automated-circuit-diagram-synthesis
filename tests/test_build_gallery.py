@@ -20,7 +20,10 @@ class GalleryBuilderTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="gallery-builder-")
         self.addCleanup(self.temporary.cleanup)
-        self.root = Path(self.temporary.name)
+        # Windows temp paths can contain an 8.3 alias (RUNNER~1), while the
+        # builder resolves it to the long path. Use that same file identity so
+        # the final-index I/O fault injection matches the intended destination.
+        self.root = Path(self.temporary.name).resolve()
         self.repository = self.root / "repository"
         self.spec_dir = self.repository / "assets/verified-circuits"
         self.spec_dir.mkdir(parents=True)
