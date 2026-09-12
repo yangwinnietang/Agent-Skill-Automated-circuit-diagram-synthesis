@@ -47,4 +47,3 @@ The original import remains available: `compile_circuit(path)` returns `bool`.
 For structured results, use `build(path, formats=("pdf", "svg"))`, which returns
 `BuildResult(artifacts, log, warnings)` and raises `BuildError`. Default SVG export
 is now opt-in to make dependencies and deliverables predictable.
-
