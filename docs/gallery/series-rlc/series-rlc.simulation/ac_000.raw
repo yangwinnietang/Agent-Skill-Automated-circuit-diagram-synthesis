@@ -1,0 +1,21 @@
+Title: series-rlc: series rlc, output across resistor
+Date: Sat Sep 12 09:16:47  2026
+Plotname: AC Analysis
+Flags: complex
+No. Variables: 6
+No. Points: 1
+Variables:
+	0	frequency	frequency
+	1	i(l1)	current
+	2	v(lc)	voltage
+	3	v(rl)	voltage
+	4	i(v1)	current
+	5	v(vin)	voltage
+Values:
+ 0	1.000000000000000e+02,0.000000000000000e+00
+	3.963426971135761e-05,6.283086994288971e-04
+	9.999843530174890e-01,-6.307989940400091e-02
+	9.960365730288643e-01,-6.283086994288971e-02
+	-3.963426971135761e-05,-6.283086994288971e-04
+	1.000000000000000e+00,0.000000000000000e+00
+

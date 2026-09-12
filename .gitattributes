@@ -1,0 +1,2 @@
+# Retain native simulator output, including its final blank separator.
+*.raw -text whitespace=-blank-at-eof

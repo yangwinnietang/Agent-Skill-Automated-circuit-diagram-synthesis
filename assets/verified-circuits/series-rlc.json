@@ -1,0 +1,224 @@
+{
+  "id": "series-rlc",
+  "title": "Series RLC, output across resistor",
+  "category": "Passive filters",
+  "nodes": {
+    "VP": {
+      "net": "vin",
+      "at": [
+        0,
+        3
+      ]
+    },
+    "VG": {
+      "net": "0",
+      "at": [
+        0,
+        0
+      ]
+    },
+    "RPLUS": {
+      "net": "vin",
+      "at": [
+        1.5,
+        3
+      ]
+    },
+    "RMINUS": {
+      "net": "rl",
+      "at": [
+        5,
+        3
+      ]
+    },
+    "LC": {
+      "net": "lc",
+      "at": [
+        8.5,
+        3
+      ]
+    },
+    "CG": {
+      "net": "0",
+      "at": [
+        8.5,
+        0
+      ]
+    }
+  },
+  "components": [
+    {
+      "ref": "V1",
+      "kind": "V",
+      "value": 1,
+      "pins": [
+        "VP",
+        "VG"
+      ],
+      "label_side": "above",
+      "ac": 1
+    },
+    {
+      "ref": "R1",
+      "kind": "R",
+      "value": 100,
+      "pins": [
+        "RPLUS",
+        "RMINUS"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "L1",
+      "kind": "L",
+      "value": 0.01,
+      "pins": [
+        "RMINUS",
+        "LC"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "C1",
+      "kind": "C",
+      "value": 1e-06,
+      "pins": [
+        "LC",
+        "CG"
+      ],
+      "label_side": "above"
+    }
+  ],
+  "wires": [
+    [
+      "VP",
+      "RPLUS"
+    ],
+    [
+      "VG",
+      "CG"
+    ]
+  ],
+  "grounds": [
+    "VG"
+  ],
+  "junctions": [],
+  "ports": [
+    {
+      "point": "RPLUS",
+      "label": "Vout+"
+    },
+    {
+      "point": "RMINUS",
+      "label": "Vout-"
+    }
+  ],
+  "analysis": {
+    "dc": true,
+    "ac_hz": [
+      100,
+      1591.5494309189537,
+      10000
+    ],
+    "measurements": [
+      {
+        "name": "V_vin",
+        "positive": "vin",
+        "negative": "0"
+      },
+      {
+        "name": "V_rl",
+        "positive": "rl",
+        "negative": "0"
+      },
+      {
+        "name": "V_lc",
+        "positive": "lc",
+        "negative": "0"
+      },
+      {
+        "name": "output",
+        "positive": "vin",
+        "negative": "rl"
+      }
+    ]
+  },
+  "expected": {
+    "dc": {
+      "V_vin": 1,
+      "V_rl": 1,
+      "V_lc": 1,
+      "output": 0
+    },
+    "ac": [
+      {
+        "frequency": 100,
+        "values": {
+          "V_vin": [
+            1.0,
+            0.0
+          ],
+          "V_rl": [
+            0.9960365730288643,
+            -0.06283086994288971
+          ],
+          "V_lc": [
+            0.999984353017489,
+            -0.0630798994040009
+          ],
+          "output": [
+            0.0039634269711357195,
+            0.06283086994288971
+          ]
+        }
+      },
+      {
+        "frequency": 1591.5494309189537,
+        "values": {
+          "V_vin": [
+            1.0,
+            0.0
+          ],
+          "V_rl": [
+            8.077935669463161e-32,
+            2.842170943040401e-16
+          ],
+          "V_lc": [
+            -2.8421709430404003e-16,
+            -0.9999999999999998
+          ],
+          "output": [
+            1.0,
+            -2.842170943040401e-16
+          ]
+        }
+      },
+      {
+        "frequency": 10000,
+        "values": {
+          "V_vin": [
+            1.0,
+            0.0
+          ],
+          "V_rl": [
+            0.974028502300862,
+            0.15905024051035463
+          ],
+          "V_lc": [
+            -0.025313631977177755,
+            -0.0041334922383175965
+          ],
+          "output": [
+            0.02597149769913798,
+            -0.15905024051035463
+          ]
+        }
+      }
+    ]
+  },
+  "notes": [
+    "Vout is the differential voltage across R1: V(vin) - V(rl), with positive polarity toward the source.",
+    "The sequence is source to R1 to L1 to C1 to ground. No single node-to-ground voltage is Vout.",
+    "Ideal band-pass response: resonance = 1591.549431 Hz and Q = 1. Source: DC 1 V and AC 1 V."
+  ]
+}

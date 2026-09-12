@@ -1,0 +1,139 @@
+{
+  "id": "parallel-current",
+  "title": "Parallel resistors with upward current source",
+  "category": "DC networks",
+  "nodes": {
+    "IB": {
+      "net": "0",
+      "at": [
+        0,
+        0
+      ]
+    },
+    "IT": {
+      "net": "out",
+      "at": [
+        0,
+        3.5
+      ]
+    },
+    "RONEP": {
+      "net": "out",
+      "at": [
+        3,
+        3.5
+      ]
+    },
+    "RONEN": {
+      "net": "0",
+      "at": [
+        3,
+        0
+      ]
+    },
+    "RTWOP": {
+      "net": "out",
+      "at": [
+        6,
+        3.5
+      ]
+    },
+    "RTWON": {
+      "net": "0",
+      "at": [
+        6,
+        0
+      ]
+    }
+  },
+  "components": [
+    {
+      "ref": "I1",
+      "kind": "I",
+      "value": 0.003,
+      "pins": [
+        "IB",
+        "IT"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "R1",
+      "kind": "R",
+      "value": 1000,
+      "pins": [
+        "RONEP",
+        "RONEN"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "R2",
+      "kind": "R",
+      "value": 2000,
+      "pins": [
+        "RTWOP",
+        "RTWON"
+      ],
+      "label_side": "above"
+    }
+  ],
+  "wires": [
+    [
+      "IT",
+      "RONEP"
+    ],
+    [
+      "RONEP",
+      "RTWOP"
+    ],
+    [
+      "IB",
+      "RONEN"
+    ],
+    [
+      "RONEN",
+      "RTWON"
+    ]
+  ],
+  "grounds": [
+    "IB"
+  ],
+  "junctions": [
+    "RONEP",
+    "RONEN"
+  ],
+  "ports": [
+    {
+      "point": "RTWOP",
+      "label": "Vout"
+    }
+  ],
+  "analysis": {
+    "dc": true,
+    "ac_hz": [],
+    "measurements": [
+      {
+        "name": "V_out",
+        "positive": "out",
+        "negative": "0"
+      },
+      {
+        "name": "output",
+        "positive": "out",
+        "negative": "0"
+      }
+    ]
+  },
+  "expected": {
+    "dc": {
+      "V_out": 2,
+      "output": 2
+    },
+    "ac": []
+  },
+  "notes": [
+    "The current-source arrow points upward, from ground into the shared top node.",
+    "Vout = 2 V; resistor currents are 2 mA through R1 and 1 mA through R2."
+  ]
+}

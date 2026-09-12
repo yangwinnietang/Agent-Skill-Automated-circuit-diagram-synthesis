@@ -1,0 +1,29 @@
+\documentclass[border=12pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage[europeanresistors,americanvoltages,americancurrents,americaninductors]{circuitikz}
+\definecolor{circuitink}{HTML}{20334A}
+\begin{document}
+% Generated from validated JSON; edit the JSON to keep SPICE in sync.
+% V pins: [positive, negative]; I pins: [arrow from, arrow to].
+\begin{circuitikz}[color=circuitink,thick,font=\small]
+\coordinate (PIB) at (0,0);
+\coordinate (PIT) at (0,3.5);
+\coordinate (PRONEP) at (3,3.5);
+\coordinate (PRONEN) at (3,0);
+\coordinate (PRTWOP) at (6,3.5);
+\coordinate (PRTWON) at (6,0);
+\draw (PIB) to[I,l^={\shortstack{$I_{\mathrm{1}}$\\$3\,\mathrm{m}\mathrm{A}$}}] (PIT);
+\draw (PRONEP) to[R,l^={\shortstack{$R_{\mathrm{1}}$\\$1\,\mathrm{k}\Omega$}}] (PRONEN);
+\draw (PRTWOP) to[R,l^={\shortstack{$R_{\mathrm{2}}$\\$2\,\mathrm{k}\Omega$}}] (PRTWON);
+\draw (PIT) -- (PRONEP);
+\draw (PRONEP) -- (PRTWOP);
+\draw (PIB) -- (PRONEN);
+\draw (PRONEN) -- (PRTWON);
+\draw (PIB) node[ground] {};
+\node[circ] at (PRONEP) {};
+\node[circ] at (PRONEN) {};
+\draw (PRTWOP) node[ocirc] {} node[above right] {Vout};
+\end{circuitikz}
+\end{document}

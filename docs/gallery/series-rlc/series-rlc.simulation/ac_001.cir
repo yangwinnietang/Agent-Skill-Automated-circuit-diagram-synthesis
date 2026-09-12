@@ -1,0 +1,15 @@
+series-rlc: Series RLC, output across resistor
+* Ideal linear signal model; opamps have no supply or output limits.
+V1 vin 0 DC 1 AC 1
+R1 vin rl 100
+L1 rl lc 0.01
+C1 lc 0 9.9999999999999995e-07
+.ac lin 1 1591.5494309189537 1591.5494309189537
+.control
+set filetype=ascii
+set numdgt=15
+run
+write result.raw all
+quit
+.endc
+.end

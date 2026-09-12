@@ -1,0 +1,15 @@
+opamp-inverting: Inverting amplifier
+* Ideal linear signal model; opamps have no supply or output limits.
+EU1 out 0 0 sum 1000000
+V1 vin 0 DC 0.10000000000000001 AC 0
+Rin vin sum 10000
+Rf sum out 100000
+.op
+.control
+set filetype=ascii
+set numdgt=15
+run
+write result.raw all
+quit
+.endc
+.end

@@ -1,0 +1,23 @@
+Title: opamp-summer: inverting weighted summer
+Date: Sat Sep 12 09:16:28  2026
+Plotname: Operating Point
+Flags: real
+No. Variables: 7
+No. Points: 1
+Variables:
+	0	v(out)	voltage
+	1	i(eu1)	current
+	2	v(sum)	voltage
+	3	v(va)	voltage
+	4	i(va)	current
+	5	v(vb)	voltage
+	6	i(vb)	current
+Values:
+ 0	-3.999990000025000e-01
+	3.999994000015001e-05
+	3.999990000025000e-07
+	2.000000000000000e-01
+	-1.999996000010000e-05
+	4.000000000000000e-01
+	-1.999998000005000e-05
+

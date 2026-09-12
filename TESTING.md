@@ -1,47 +1,117 @@
-# Validation
+# Verification and reproducibility
 
-## Reproduce
+## Run the checks
 
-Fast checks (Python 3.9+, no third-party Python dependencies):
+Fast tests require only Python 3.9+ and the complete repository:
 
 ```bash
-python -m unittest discover -s tests -p test_compile.py -v
-python -m unittest discover -s tests -p test_resources.py -v
+python -m unittest discover -s tests -v
 ```
 
-Full real-tool suite, including three engines and Chinese labels:
+On Linux the suite contains **126 test methods**: 103 run without external tools; 23 require
+real rendering or simulation and are skipped unless their flags are enabled.
+Windows additionally skips three POSIX-specific checks.
+Enable all checks on a machine with the dependencies in the README:
 
 ```bash
 CIRCUIT_RUN_INTEGRATION=1 \
+CIRCUIT_RUN_SPICE=1 \
 CIRCUIT_TEST_ENGINES=pdflatex,xelatex,lualatex \
 CIRCUIT_TEST_CHINESE=1 \
 python -m unittest discover -s tests -v
 ```
 
-There are 43 fast test methods and 13 integration methods. One integration method
-runs **17 complete documents per selected engine**, with PDF, SVG and PNG for each.
-The corpus contains 12 component/topology examples, the default template, a known
-image fixture, and 3 diagrams independently authored by agents using the skill.
-Integration is opt-in locally; when enabled, missing required tools are failures.
-Chinese and missing-glyph checks require their documented environment flags.
-The GitHub workflow enables all of them; no rendering checks are skipped there.
+For PowerShell, set each flag with `$env:CIRCUIT_RUN_SPICE = '1'` (and the other
+three variables) before running the same Python command. When a real-tool flag is
+enabled, a missing dependency fails the check rather than quietly skipping it.
 
-## What is checked
+Rebuild the complete valued gallery:
 
-| Layer | Observable behavior |
+```bash
+python scripts/build_gallery.py --output-dir build/gallery
+```
+
+This produces 12 TeX sources, 12 PDFs, 12 SVGs, 12 PNGs, connection tables, 24 actual
+SPICE analyses, and a JSON summary. Use `--overwrite` explicitly for an existing
+generated gallery. To update the published artifacts, select `--output-dir
+docs/gallery`, then inspect every changed PNG and update the visual review record.
+The preview illustration is composed from the actual vector exports.
+
+## Evidence for the twelve circuits
+
+- [Gallery and downloads](docs/gallery/README.md)
+- [Independent formulas, terminal maps and expected values](docs/validation/analytic-reference.md)
+- [Machine-readable independent oracle](tests/oracles/electrical-ground-truth.json)
+- [Numerical summary](docs/gallery/summary.json)
+- [Individual visual inspections](docs/validation/visual-review.md)
+- [SHA-256 identities of reviewed PNGs](docs/validation/visual-review.json)
+
+The canonical gallery passes **24 DC/AC analyses and 81 voltage comparisons**.
+Every nonground node is checked, as well as the explicitly defined output. The
+maximum absolute error is **1.5687 × 10⁻¹¹ V**, compared with a tolerance of
+`1e-9 V + 1e-6 × |expected|`. AC comparisons use complex voltage differences;
+phase wrapping and undefined phase at zero are not used as pass/fail criteria.
+
+Independent equations were established before examining generator or simulator
+output. The DC reference uses Ohm's law and KCL; the filter reference uses complex
+impedances; opamp values include finite gain A = 10⁶. A separate reviewer checked
+all ordered terminals and component values against that reference. Each PNG was
+opened and manually traced by the primary reviewer and one additional agent.
+
+Visual review found two real problems: the first current-source style omitted its
+arrow, and hollow measurement markers covered bridge junction dots. Both were
+corrected, regenerated and inspected again. The final source has explicit symbol
+styles and preserves solid branch dots underneath port labels.
+
+Each circuit's simulation folder retains `.cir`, ASCII `.raw`, `.log`, and
+`report.json` files. Reports include the simulator version, canonical spec hash,
+expected and actual values, errors, and tolerances. They are actual execution
+records, not hand-entered PASS labels. Generated sources and simulation netlists
+are checked against the current specifications; reviewed image hashes are also
+checked to catch stale published evidence.
+
+## Test coverage
+
+| Layer | Checks and concrete failures covered |
 |---|---|
-| Input and CLI | Bare, relative, absolute, spaced and Unicode paths; relative includes; missing inputs; invalid arguments; exit codes |
-| Failure recovery | Real malformed TeX, missing tools, timed-out processes, failed converters, missing/invalid artifacts, missing glyphs; old outputs preserved |
-| Output | PDF signature; parseable SVG with vector paths and no embedded raster; PNG signature/dimensions; single-page export contract |
-| Source integrity | Source untouched, example copies never overwrite edits, isolated concurrent build jobs, atomic file replacement |
-| Polarity | PDF text bounding boxes verify that the voltage source's rendered `+` is above `−`; independent of source-text assertions |
-| Chinese | XeLaTeX compilation, all three exports, extracted Chinese label text, visual inspection |
-| Resources | Working image PNG checksums/decompression, damaged original retained, resolvable skill resource links |
-| Process controls | Shell escape disabled and process timeouts actually exercised; these do not constitute a security sandbox |
+| Compilation (47 methods) | Real/bare/Unicode paths, source-relative includes, invalid options, engine/converter errors, empty or invalid artifacts, native TeX missing-glyph logs, timeout, no shell escape, narrow console encodings, relative PATH executables |
+| Electrical engine (26 methods) | Strict fields/units, duplicated JSON keys, dangling/shorted/floating structures, opamp anchors, polarity, malformed/truncated/nonfinite raw data, absent vectors, error text with exit 0, stale raw output, version/provenance, tiny-frequency mismatch |
+| Synthesis (19 methods) | Source-only and real exports, all 12 cases, literal label escaping, rendered source signs, namespace collisions, explicit overwrite, stale images/reports, failed-job evidence, symlink/directory conflicts |
+| Independent electrical checks (8 methods) | All 12 terminal maps and counts, DC node values and signed branch currents, KCL, AC internal nodes, 30 parameter analyses, 5 incorrect-circuit analyses |
+| General real rendering (13 methods) | 17-document corpus per selected engine; three formats, multipage contract, Chinese labels, missing glyphs, concurrent jobs, toolchain preflight, source polarity |
+| Gallery publication (5 methods) | Full-spec preflight, existing metadata protection, symlink/type conflicts, invalid later input, failed preview/index/summary writes, no false PASS |
+| Resources and published evidence (8 methods) | Decodable image fixture, preserved corrupt original, local links, all 12 export triplets, spec/netlist/report consistency, reviewed PNG hashes |
 
-Unit tests inject tool failures; they do not substitute for integration tests. The
-`pdf2svg` fallback is covered by a mocked contract test; the real conversion matrix
-uses Poppler. Multi-page PDF-only output is allowed, while SVG/PNG rejects it.
+The independent parameter tests execute **30 additional analyses**, varying source
+sign and amplitude, resistor decades, filter parts and frequency, current-source
+sign, and opamp gain. Five deliberately incorrect but structurally valid circuits
+must fail voltage comparisons: reversed voltage-source polarity, reversed
+current-source arrow, wrong load, reversed RLC differential output, and wrong
+opamp input polarity. These are expected numerical failures, not missing-tool failures.
+
+The broader render corpus contains the original 12 component examples, the default
+template, a known image fixture, and 3 independently authored forward-use diagrams.
+One test renders all 17 with each selected engine in PDF, SVG and PNG. The actual
+converter matrix uses Poppler; the alternate `pdf2svg` path has a mocked contract
+test rather than a claimed real fallback run.
+
+## Execution environment and CI
+
+Local execution uses Python 3.12, TeX Live 2023 engines, CircuiTikZ 1.6.6, Poppler
+24.02.0 and ngspice 42. Earlier rendering validation also exercised CircuiTikZ
+1.8.6. The restricted development runtime needed scratch-local TeX format/font
+files and ngspice temporary-file compatibility. Those environment repairs are
+not repository dependencies; normal installations use the distribution packages.
+
+The local three-engine main regression completed 120 methods with no skips; the six final gallery/publication checks added during review passed separately.
+
+The GitHub workflow runs the fast suite on Linux and Windows with Python 3.9 and
+3.12, then installs real dependencies on Ubuntu 24.04 and runs all flags, all three
+engines and Chinese checks. See [current workflow runs](https://github.com/yangwinnietang/Agent-Skill-Automated-circuit-diagram-synthesis/actions/workflows/test.yml).
+The first expanded Windows CI run exposed short-path aliases in temporary fixtures
+and POSIX-only spellings in mocked executable paths. Those fixtures now use resolved
+native paths, with all failure injections and assertions retained.
+Cross-platform rendering outside that Linux job is not claimed.
 
 ## Independent skill use
 
@@ -61,45 +131,20 @@ The new `photo.png` is rendered from `tests/fixtures/reference-network.tex`, wit
 explicit ground truth in the adjacent JSON. It is a newly authored input fixture,
 not a repair or guessed reconstruction of the corrupted original image.
 
-## Execution record (2026-09-11)
-
-Local verification uses Python 3.12, TeX Live 2023 engines and Poppler 24.02.0.
-Both CircuiTikZ 1.6.6 and the separately obtained 1.8.6 are exercised. The supplied
-container initially lacked usable format files, font maps, Chinese packages and
-LuaLaTeX dependencies; these were provisioned in an isolated local TeX tree.
-Normal installations should use their distribution package manager, not mix
-current CTAN language packages into an older LaTeX kernel.
-
-- Fast checks: 43 methods passed.
-- Revised full local suite with XeLaTeX selected: **56 tests passed, no skips**,
-  including all 17 documents, Chinese, missing glyphs, polarity and CLI checks.
-- Initial corrected real suite: pdfLaTeX and XeLaTeX, all 12 examples plus template
-  passed; the 49-method suite at that point passed with its optional Chinese test
-  disabled. The expanded corpus and additional regressions are included in CI.
-- CircuiTikZ 1.8.6: the expanded 17-document pdfLaTeX rendering corpus passed.
-- Targeted three-engine rendered polarity check passed; real XeLaTeX missing-glyph
-  rejection passed. Chinese template compiled to PDF/SVG/PNG and was visually read.
-- Manual visual review covered all 12 example layouts, both text-generated
-  diagrams, the reference image and the independently reconstructed image.
-
-The initial CI run found a Windows-only test assertion issue: a temporary path in
-8.3 short-name form was compared with its resolved long form. The assertion now
-compares resolved paths. The next Windows run exposed locale-dependent decoding
-of UTF-8 Markdown in the resource test; resource/log reads now select UTF-8
-explicitly. Local extended runs also exposed an undetermined page
-count being reported as a multi-page document; pdfinfo output is now parsed
-separately and reports the exact failure category.
-
-The full final CI run is the authoritative fresh-install and cross-platform
-record; its status is available on the pull request. The workflow runs Python
-3.9/3.12 fast checks on Linux/Windows and the complete three-engine rendering suite
-on Ubuntu 24.04. Cross-platform rendering outside that Linux job is not claimed.
-
 ## Limits
 
-Tests verify build behavior, known examples and a small set of independent agent
-runs. They are not a statistical benchmark of arbitrary circuit photos or a proof
-of electrical correctness. SVG/PNG appearance and terminal-table comparison remain
-necessary. No SPICE simulation, hardware testing, PCB verification, or electrical
-certification was performed. Font/package warnings remain visible in logs; the
-expected disabled-shell-escape warning does not invalidate a drawing.
+These checks establish correspondence and numerical agreement for the listed
+circuits under their explicit ideal models. They do not prove arbitrary image
+reconstruction accuracy, physical opamp stability, transient behavior, component
+ratings, tolerance behavior, PCB connectivity or hardware safety. There has been
+no physical hardware testing or design certification.
+
+The opamp model has no rails, saturation, bandwidth, slew rate or current limit.
+A DC solution is not a stability analysis. The freeform semiconductor and logic
+examples are render-tested; they are not simulated by the restricted linear
+schema. Geometric wire crossings and label overlap still require visual review.
+Disabled TeX shell escape is not an isolation boundary for hostile TeX.
+
+Publication is atomic per file, not across an entire directory. Old outputs can
+remain after a failed job and must not be presented as a new success. Warnings and
+failure evidence remain available for inspection.

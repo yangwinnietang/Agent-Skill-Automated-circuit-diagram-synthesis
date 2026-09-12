@@ -1,0 +1,15 @@
+Title: divider-unloaded: unloaded voltage divider
+Date: Sat Sep 12 09:16:18  2026
+Plotname: Operating Point
+Flags: real
+No. Variables: 3
+No. Points: 1
+Variables:
+	0	v(vcc)	voltage
+	1	v(out)	voltage
+	2	i(v1)	current
+Values:
+ 0	5.000000000000000e+00
+	2.500000000000000e+00
+	-2.500000000000000e-04
+

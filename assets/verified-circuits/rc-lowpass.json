@@ -1,0 +1,202 @@
+{
+  "id": "rc-lowpass",
+  "title": "RC low-pass filter",
+  "category": "Passive filters",
+  "nodes": {
+    "VP": {
+      "net": "vin",
+      "at": [
+        0,
+        3
+      ]
+    },
+    "VG": {
+      "net": "0",
+      "at": [
+        0,
+        0
+      ]
+    },
+    "IN": {
+      "net": "vin",
+      "at": [
+        1.5,
+        3
+      ]
+    },
+    "OUT": {
+      "net": "out",
+      "at": [
+        5,
+        3
+      ]
+    },
+    "SHUNTG": {
+      "net": "0",
+      "at": [
+        5,
+        0
+      ]
+    },
+    "PROBE": {
+      "net": "out",
+      "at": [
+        7,
+        3
+      ]
+    }
+  },
+  "components": [
+    {
+      "ref": "V1",
+      "kind": "V",
+      "value": 1,
+      "pins": [
+        "VP",
+        "VG"
+      ],
+      "label_side": "above",
+      "ac": 1
+    },
+    {
+      "ref": "R1",
+      "kind": "R",
+      "value": 1000,
+      "pins": [
+        "IN",
+        "OUT"
+      ],
+      "label_side": "above"
+    },
+    {
+      "ref": "C1",
+      "kind": "C",
+      "value": 1e-07,
+      "pins": [
+        "OUT",
+        "SHUNTG"
+      ],
+      "label_side": "above"
+    }
+  ],
+  "wires": [
+    [
+      "VP",
+      "IN"
+    ],
+    [
+      "OUT",
+      "PROBE"
+    ],
+    [
+      "VG",
+      "SHUNTG"
+    ]
+  ],
+  "grounds": [
+    "VG"
+  ],
+  "junctions": [
+    "OUT"
+  ],
+  "ports": [
+    {
+      "point": "IN",
+      "label": "Vin"
+    },
+    {
+      "point": "PROBE",
+      "label": "Vout"
+    }
+  ],
+  "analysis": {
+    "dc": true,
+    "ac_hz": [
+      100,
+      1591.5494309189537,
+      10000
+    ],
+    "measurements": [
+      {
+        "name": "V_vin",
+        "positive": "vin",
+        "negative": "0"
+      },
+      {
+        "name": "V_out",
+        "positive": "out",
+        "negative": "0"
+      },
+      {
+        "name": "output",
+        "positive": "out",
+        "negative": "0"
+      }
+    ]
+  },
+  "expected": {
+    "dc": {
+      "V_vin": 1,
+      "V_out": 1,
+      "output": 1
+    },
+    "ac": [
+      {
+        "frequency": 100,
+        "values": {
+          "V_vin": [
+            1.0,
+            0.0
+          ],
+          "V_out": [
+            0.9960676824071726,
+            -0.0625847782705717
+          ],
+          "output": [
+            0.9960676824071726,
+            -0.0625847782705717
+          ]
+        }
+      },
+      {
+        "frequency": 1591.5494309189537,
+        "values": {
+          "V_vin": [
+            1.0,
+            0.0
+          ],
+          "V_out": [
+            0.4999999999999999,
+            -0.5
+          ],
+          "output": [
+            0.4999999999999999,
+            -0.5
+          ]
+        }
+      },
+      {
+        "frequency": 10000,
+        "values": {
+          "V_vin": [
+            1.0,
+            0.0
+          ],
+          "V_out": [
+            0.024704523031857644,
+            -0.15522309613464763
+          ],
+          "output": [
+            0.024704523031857644,
+            -0.15522309613464763
+          ]
+        }
+      }
+    ]
+  },
+  "notes": [
+    "The output is across the capacitor; low frequencies pass.",
+    "Ideal components and no external output load. Source: DC 1 V and AC 1 V.",
+    "Corner frequency = 1591.549431 Hz; expected AC values are also the voltage gain."
+  ]
+}

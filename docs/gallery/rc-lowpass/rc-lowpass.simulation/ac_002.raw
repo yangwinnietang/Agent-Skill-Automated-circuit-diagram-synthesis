@@ -1,0 +1,17 @@
+Title: rc-lowpass: rc low-pass filter
+Date: Sat Sep 12 09:16:39  2026
+Plotname: AC Analysis
+Flags: complex
+No. Variables: 4
+No. Points: 1
+Variables:
+	0	frequency	frequency
+	1	v(out)	voltage
+	2	i(v1)	current
+	3	v(vin)	voltage
+Values:
+ 0	1.000000000000000e+04,0.000000000000000e+00
+	2.470452303185765e-02,-1.552230961346477e-01
+	-9.752954769681423e-04,-1.552230961346477e-04
+	1.000000000000000e+00,0.000000000000000e+00
+

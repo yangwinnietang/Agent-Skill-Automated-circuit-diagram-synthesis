@@ -1,0 +1,252 @@
+{
+  "case_id": "series-rlc",
+  "title": "Series RLC, output across resistor",
+  "status": "pass",
+  "model": "ideal linear components; signal-only finite-gain opamps",
+  "tolerances": {
+    "absolute_v": 1e-09,
+    "relative": 1e-06
+  },
+  "runs": [
+    {
+      "analysis": "dc",
+      "frequency_hz": null,
+      "status": "pass",
+      "artifacts": {
+        "netlist": "dc.cir",
+        "raw": "dc.raw",
+        "log": "dc.log"
+      },
+      "measurements": {
+        "V_vin": {
+          "actual": 1.0,
+          "expected": 1,
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 1.001e-06,
+          "passed": true
+        },
+        "V_rl": {
+          "actual": 1.0,
+          "expected": 1,
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 1.001e-06,
+          "passed": true
+        },
+        "V_lc": {
+          "actual": 1.0,
+          "expected": 1,
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 1.001e-06,
+          "passed": true
+        },
+        "output": {
+          "actual": 0.0,
+          "expected": 0,
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 1e-09,
+          "passed": true
+        }
+      }
+    },
+    {
+      "analysis": "ac",
+      "frequency_hz": 100,
+      "status": "pass",
+      "artifacts": {
+        "netlist": "ac_000.cir",
+        "raw": "ac_000.raw",
+        "log": "ac_000.log"
+      },
+      "measurements": {
+        "V_vin": {
+          "actual": [
+            1.0,
+            0.0
+          ],
+          "expected": [
+            1.0,
+            0.0
+          ],
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 1.001e-06,
+          "passed": true
+        },
+        "V_rl": {
+          "actual": [
+            0.9960365730288643,
+            -0.06283086994288971
+          ],
+          "expected": [
+            0.9960365730288643,
+            -0.06283086994288971
+          ],
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 9.990163190193156e-07,
+          "passed": true
+        },
+        "V_lc": {
+          "actual": [
+            0.999984353017489,
+            -0.06307989940400091
+          ],
+          "expected": [
+            0.999984353017489,
+            -0.0630798994040009
+          ],
+          "absolute_error_v": 1.3877787807814457e-17,
+          "allowed_error_v": 1.002971945709372e-06,
+          "passed": true
+        },
+        "output": {
+          "actual": [
+            0.0039634269711357195,
+            0.06283086994288971
+          ],
+          "expected": [
+            0.0039634269711357195,
+            0.06283086994288971
+          ],
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 6.395575407487267e-08,
+          "passed": true
+        }
+      }
+    },
+    {
+      "analysis": "ac",
+      "frequency_hz": 1591.5494309189537,
+      "status": "pass",
+      "artifacts": {
+        "netlist": "ac_001.cir",
+        "raw": "ac_001.raw",
+        "log": "ac_001.log"
+      },
+      "measurements": {
+        "V_vin": {
+          "actual": [
+            1.0,
+            0.0
+          ],
+          "expected": [
+            1.0,
+            0.0
+          ],
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 1.001e-06,
+          "passed": true
+        },
+        "V_rl": {
+          "actual": [
+            0.0,
+            3.469446951953614e-16
+          ],
+          "expected": [
+            8.077935669463161e-32,
+            2.842170943040401e-16
+          ],
+          "absolute_error_v": 6.272760089132134e-17,
+          "allowed_error_v": 1.0000000000002842e-09,
+          "passed": true
+        },
+        "V_lc": {
+          "actual": [
+            -3.885780586188048e-16,
+            -0.9999999999999998
+          ],
+          "expected": [
+            -2.8421709430404003e-16,
+            -0.9999999999999998
+          ],
+          "absolute_error_v": 1.0436096431476476e-16,
+          "allowed_error_v": 1.0009999999999998e-06,
+          "passed": true
+        },
+        "output": {
+          "actual": [
+            1.0,
+            -3.469446951953614e-16
+          ],
+          "expected": [
+            1.0,
+            -2.842170943040401e-16
+          ],
+          "absolute_error_v": 6.272760089132134e-17,
+          "allowed_error_v": 1.001e-06,
+          "passed": true
+        }
+      }
+    },
+    {
+      "analysis": "ac",
+      "frequency_hz": 10000,
+      "status": "pass",
+      "artifacts": {
+        "netlist": "ac_002.cir",
+        "raw": "ac_002.raw",
+        "log": "ac_002.log"
+      },
+      "measurements": {
+        "V_vin": {
+          "actual": [
+            1.0,
+            0.0
+          ],
+          "expected": [
+            1.0,
+            0.0
+          ],
+          "absolute_error_v": 0.0,
+          "allowed_error_v": 1.001e-06,
+          "passed": true
+        },
+        "V_rl": {
+          "actual": [
+            0.974028502300862,
+            0.1590502405103546
+          ],
+          "expected": [
+            0.974028502300862,
+            0.15905024051035463
+          ],
+          "absolute_error_v": 2.7755575615628914e-17,
+          "allowed_error_v": 9.879288233205382e-07,
+          "passed": true
+        },
+        "V_lc": {
+          "actual": [
+            -0.02531363197717776,
+            -0.004133492238317597
+          ],
+          "expected": [
+            -0.025313631977177755,
+            -0.0041334922383175965
+          ],
+          "absolute_error_v": 3.576224061345498e-18,
+          "allowed_error_v": 2.6648893191719365e-08,
+          "passed": true
+        },
+        "output": {
+          "actual": [
+            0.02597149769913798,
+            -0.1590502405103546
+          ],
+          "expected": [
+            0.02597149769913798,
+            -0.15905024051035463
+          ],
+          "absolute_error_v": 2.7755575615628914e-17,
+          "allowed_error_v": 1.6215674884762963e-07,
+          "passed": true
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "simulator": {
+    "executable": "/workspace/scratch/d265da16246a/tex-runtime/bin/ngspice",
+    "version": "42",
+    "version_output": "******\n** ngspice-42 : Circuit level simulation program\n** Compiled with KLU Direct Linear Solver\n** The U. C. Berkeley CAD Group\n** Copyright 1985-1994, Regents of the University of California.\n** Copyright 2001-2023, The ngspice team.\n** Please get your ngspice manual from https://ngspice.sourceforge.io/docs.html\n** Please file your bug-reports at http://ngspice.sourceforge.net/bugrep.html\n** Creation Date: Sun Mar 31 20:15:14 UTC 2024\n******",
+    "version_exit_code": 0
+  },
+  "spec_sha256": "b0419cd266237190367d253c3307c859626fb46e050fa9123223134224cb0c76"
+}
